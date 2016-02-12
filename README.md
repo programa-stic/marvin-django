@@ -9,7 +9,7 @@ Marvin es un sistema que analiza aplicaciones de Android en busca de vulnerabili
 El script `setup.sh` ejecuta las acciones necesarias para instalar Marvin en una máquina Ubuntu 14.04 o superior. Marvin utiliza varios programas externos, a saber MySQL, ElasticSearch y GitLab; la configuración para acceder a los mismos es en `marvin-django/marvin/settings.py` para Elasticsearch y MySql, y en `marvin/django/frontpage/settings.py` para GitLab. ElasticSearch y MySQL los instala el script, pero la instalación de GitLab es aparte. Se recomienda editar estos archivos antes de correr `Instalacion.sh`
 
 `frontpage/settings.py:` 
-======================
+----------------------
 	 vuln_analysis_dir = ubicación del Apk Vulnerability Finder  (apunta a la ubicación por defecto)  
 	 perms_list_file = archivo que contiene la lista de permisos para la interfaz con Weka  (apunta a la ubicación por defecto)  
 	 model_file = Modelo bayesiano para Weka  (apunta a la ubicación por defecto)  
@@ -79,4 +79,3 @@ Android-checkin: `https://github.com/nviennot/android-checkin`
 ### Información de contacto ###
 
   * Juan Heguiabehere, jheguia@fundacionsadosky.org.ar
-  * Joaquín Rinaudo, jrinaudo@fundacionsadosky.org.ar

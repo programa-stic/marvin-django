@@ -14,7 +14,7 @@ go in `marvin-frontend/marvin/frontend/settings.py`. MySQL and Elasticsearch get
 will have to be provided by the user.
 
 `frontpage/settings.py`:
-======================
+-----------------------
 	vuln_analysis_dir = marvin_static_analyzer installation folder (points to default path)
 	perms_list_file = Permissions list for malware heuristics analysis  (default path)
 	model_file = Bayesian model for malware heuristics analysis (default path)
@@ -27,7 +27,7 @@ will have to be provided by the user.
 
 
 `marvin/settings.py` (the parts you should edit)
-=============================================
+-----------------------------------------------
 	SECRET_KEY : It's not safe to use the repositories', you should generate one (perhaps creating an empty app with Django and copying its SK)
 	
 	BUNGIESEARCH = {
@@ -89,4 +89,3 @@ Android-checkin: `https://github.com/nviennot/android-checkin`
 ### Contact information ###
 
   * Juan Heguiabehere, `jheguia@fundacionsadosky.org.ar`
-  * Joaquín Rinaudo, `jrinaudo@fundacionsadosky.org.ar`
