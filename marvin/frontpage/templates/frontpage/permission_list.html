@@ -1,0 +1,28 @@
+{% extends "frontpage/base.html" %}
+
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'frontpage/style.css' %}" />
+
+{% block content %}
+<table>
+	<tr>
+		<th> Permission name </th>
+		<th> Danger level </th>
+		<th> # of packages </th>
+		<th> Description </th>
+	</tr>
+
+	{% for perm in object_list %}
+	<tr>
+		<td><a href="/frontpage/Permisos/{{perm.id}}/Aplicaciones/"> {{perm.name}} </a></td>
+		<td> {{perm.perm_danger}} </td>
+		<td> {{perm.app.count}} </td>
+        <td> {{perm.perm_description}}</td>
+	</tr>
+	{% empty %}
+		<li> No hay permisos </li>
+	{% endfor %}
+</table>
+{% endblock %}
+	
+

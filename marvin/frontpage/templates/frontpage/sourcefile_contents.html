@@ -1,0 +1,21 @@
+{% extends "frontpage/base.html" %}
+
+
+{% block content %}
+<h1> Aplicación {{file.app.app_name}}</h1>
+<h2> Archivo {{file.file_name}} </h2>
+<!-- <table>
+	<tr><td><b>Danger level</b></td>
+		<td> {{perm.perm_danger}}</td>
+	</tr>
+	<tr><td><b>Description</b></td>
+		<td> {{perm.perm_description}}</td>
+	</tr>
+	<tr><td><b>App count</b></td>
+		<td> {{perm.app.count}}</td>
+	</tr>
+</table>
+<br>
+ -->
+{{file.file_contents|linebreaks}}
+{% endblock %}

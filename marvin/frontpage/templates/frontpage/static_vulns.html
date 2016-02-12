@@ -1,0 +1,43 @@
+{% extends "frontpage/base.html" %}
+
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'frontpage/style.css' %}" />
+
+{% block content %}
+<table>
+	<tr>
+		<th> Vulnerability name </th>
+		<th> # of instances </th>
+		<th> # of packages </th>
+	</tr>
+
+	{% for vuln in vulns %}
+	<tr>
+		<td><a href="/frontpage/static_vulns/{{vuln.name}}/Aplicaciones/"> {{vuln.name}} </a></td>
+		<td> {{vuln.count}} </td>
+		<td> {{vuln.appcount}} </td>
+	</tr>
+	{% empty %}
+		<li> No hay vulnerabilidades en la base </li>
+	{% endfor %}
+</table>
+<br>
+<div class="pagination">
+    <span class="step-links">
+        {% if vulns.has_previous %}
+            <a href="?page={{ vulns.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ vulns.number }} of {{ vulns.paginator.num_pages }}.
+        </span>
+
+        {% if vulns.has_next %}
+            <a href="?page={{ vulns.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+
+{% endblock %}
+	
+

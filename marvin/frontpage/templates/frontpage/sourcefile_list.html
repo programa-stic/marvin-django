@@ -1,0 +1,84 @@
+{% extends "frontpage/base.html" %}
+
+
+{% block content %}
+<h2> Aplicacion {{app.app_name}} </h2>
+<!-- <table>
+	<tr><td><b>Danger level</b></td>
+		<td> {{perm.perm_danger}}</td>
+	</tr>
+	<tr><td><b>Description</b></td>
+		<td> {{perm.perm_description}}</td>
+	</tr>
+	<tr><td><b>App count</b></td>
+		<td> {{perm.app.count}}</td>
+	</tr>
+</table>
+<br>
+ -->
+{% if sourcefiles %}
+
+ <table>
+	<tr>
+		{% if search_result %}
+			<th> App name </th>
+		{% endif %}
+		<th> File name </th>
+		<th> Length </th>
+	</tr>
+
+	{% for file in sourcefiles %}
+	<tr>
+		{% if search_result %}
+			<td> <a href="/frontpage/{{file.app.id}}/classes/{{file.file_name}}"> {{file.file_name}} </a> </td>
+			<td><a href="/frontpage/{{file.app.id}}/"> {{file.app.app_name}} </a></td>
+		{% endif %}
+		<td> {{file.file_contents|length}} </td>
+	</tr>
+		{% endfor %}
+</table>
+
+<!-- {% if search_result %}
+	{% regroup sourcefiles by app as app_list %}
+
+	<table>
+		<tr>
+		<th> App name </th> 
+			<th> File name </th>
+			<th> Length </th>
+		</tr>
+
+		{% for app in app_list %}
+			<tr><td> {{app.grouper.app_name}}</td></tr>
+			{% for item in app.list %}
+				<tr>
+					<td><a href="/frontpage/Codigo_fuente/{{file.id}}/"> {{file.file_name}} </a></td>
+					<td> {{file.file_contents|length}} </td>
+				</tr>
+			{% endfor %}
+		{% endfor %}
+	</table>
+{% endif %}
+ -->
+
+<div class="pagination">
+    <span class="step-links">
+        {% if sourcefiles.has_previous %}
+            <a href="?page={{ sourcefiles.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ sourcefiles.number }} of {{ sourcefiles.paginator.num_pages }}.
+        </span>
+
+        {% if sourcefiles.has_next %}
+            <a href="?page={{ sourcefiles.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+
+	
+{% else %}
+	<p> No source files available </p>
+{% endif %}
+{% endblock %}

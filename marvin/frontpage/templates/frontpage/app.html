@@ -1,0 +1,158 @@
+{% extends "frontpage/base.html" %}
+
+
+{% block content %}
+<h1> {{app.app_name}} </h1>
+<table>
+<tr> <td> Package name</td><td> {{app.package_name}} </td>
+<tr> <td> Version </td><td> {{app.version}} </td>
+{% if app.app_metadata_set.all %}
+	{% for md in app.app_metadata_set.all %}
+		<tr> <td> Subida a Google Play </td> <td> {{md.date_upload}} </td> </tr>
+		<tr> <td> Autor </td> <td> {{md.author}} </td> </tr>
+		<tr> <td> Nombre en Google Play </td> <td> {{md.app_name}} </td> </tr>
+		<tr> <td> Subida a Google Play </td> <td> {{md.date_upload}} </td> </tr>
+		<tr> <td> Enlace Google Play </td> <td> <a href="https://play.google.com/store/apps/details?id={{ app.package_name }}"> Última versión </a> </td> </tr>
+	{% endfor %}
+{% endif %}
+<tr> <td> md5 </td><td> {{app.md5}} </td>
+<tr> <td> sha1</td><td>  {{app.sha1}} </td>
+<tr> <td> Subida a Marvin </td><td> {{app.uploaded}} </td>
+</table>
+<table>
+<tr>
+<!--         <td> <a href="/frontpage/{{app.id}}/list_sources/"> Listar fuentes </a> </td> -->
+        <td>
+        	{% if app.sourcesUploaded %}
+            <form action="/frontpage/{{app.id}}/list_sources/" method="get">
+                <input type="submit" value="Git"/>
+            </form>
+            {% else %}
+            <form action="/frontpage/{{app.id}}/list_sources/" method="get">
+                <input type="submit" value="Git" disabled/>
+            </form>
+            {% endif %}
+        </td>
+        <td>
+            <form action="/frontpage/{{app.id}}/apk/" method="get">
+                <input type="submit" value="APK"/>
+            </form>
+        </td>
+<!--         <td>
+            <form action="/frontpage/{{app.id}}/src/" method="get">
+                <input type="submit" value="Fuentes"/>
+            </form>
+        </td>
+ -->        <td>
+            <form action="/frontpage/{{app.id}}/delete/" method="post">
+            	{% csrf_token %}
+                <input type="submit" value="Borrar"/>
+            </form>
+        </td>
+</tr>
+
+</table>
+
+
+<h2> Análisis según permisos</h2>
+<table>
+<tr> <td>Malware:</td> <td>{{ app.bayesResult }}</td></tr>
+<tr> <td>Confianza en el resultado: </td> <td>{{ app.bayesConfidence }}</td></tr>
+</table>
+<h2> Permisos </h2>
+<table>
+	<tr>
+		<th> Nombre </th>
+		<th> Nivel de peligro </th>
+		<th> Cantidad de paquetes </th>
+		<th> Descripcion </th>
+	</tr>
+
+	{% for perm in app.permission_set.all %}
+	<tr>
+		<td><a href="/frontpage/Permisos/{{perm.id}}/Aplicaciones/"> {{perm.name}} </a></td>
+		<td> {{perm.perm_danger}} </td>
+		<td> {{perm.app.count}} </td>
+        <td> {{perm.perm_description}}</td>
+	</tr>
+	{% empty %}
+		<li> No hay permisos </li>
+	{% endfor %}
+</table>
+
+<!-- {% for permission in app.permission_set.all %}
+	<a href="/frontpage/Permisos/{{permission.id}}/Aplicaciones/"> {{permission.name }} </a><br>
+	{% endfor %}
+ -->
+<h2> Actividades </h2>
+{% for activity in app.activity_set.all %}
+	<a href="/frontpage/{{app.id}}/classes/{{activity.name}}" target="_blank"> {{activity.name}} </a><br>
+	{% endfor %}
+
+<h2> Proveedores </h2>
+{% for provider in app.provider_set.all %}
+	<a href="/frontpage/{{app.id}}/classes/{{provider.name}}" target="_blank"> {{provider.name}} </a><br>
+<!-- 	{{provider.name }} <br> -->
+	{% endfor %}	
+
+<h2> Servicios </h2>
+{% for service in app.service_set.all %}
+	<a href="/frontpage/{{app.id}}/classes/{{service.name}}" target="_blank"> {{service.name}} </a><br>
+<!-- 	{{service.name }} <br> -->
+	{% endfor %}	
+
+<h2> Receptores </h2>
+{% for receiver in app.receiver_set.all %}
+	<a href="/frontpage/{{app.id}}/classes/{{receiver.name}} target="_blank""> {{receiver.name}} </a><br>
+<!-- 	{{receiver.name }} <br> -->
+	{% endfor %}	
+
+<h2> Vulnerabilidades </h2>
+{% if app.vulnerabilityresult_set.all %}
+<table>
+	<tr>
+		<th> Nombre </th>
+		<th> Severidad </th>
+		<th> Clase </th>
+		<th> Método </th>
+		<th> Pruebas dinámicas </th>
+<!-- 		<th> Descripcion </th> -->
+	</tr>
+
+	{% for vuln in app.vulnerabilityresult_set.all|dictsortreversed:"severity" %}
+	<tr>
+		<td>
+			<a href="/frontpage/{{vuln.id}}/DetalleVuln/"> {{ vuln.name }} </a> 
+		</td>
+		<td>
+			{{vuln.severity}}
+		</td>
+		<td>
+			{% if vuln.vuln_class %}
+				<a href="/frontpage/{{app.id}}/classes/{{vuln.vuln_class}}" target="_blank"> {{vuln.vuln_class}} </a>
+			{% endif %}
+		</td>
+		<td>
+			{% if vuln.vuln_method %}
+				{{vuln.vuln_method}}
+			{% endif %}
+		</td>
+
+		<td>
+			{{vuln.dynamicTest}}
+		</td>
+<!-- 		<td>
+			{{vuln.description}}
+		</td> -->
+	</tr>
+	{% endfor %}
+</table>
+{% elif app.status != 'Vulns checked' %}
+	<form action="/frontpage/{{app.id}}/CheckVulns/" method="post">
+	{% csrf_token %}
+    <input type="submit" value="Chequear"/>
+</form>
+{% else %}
+<h3> No se detectaron vulnerabilidades </h3>
+{% endif %}	
+{% endblock %}

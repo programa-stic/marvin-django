@@ -1,0 +1,25 @@
+# Documentación Marvin-frontend
+
+Módulos del frontend de Marvin:
+  - frontpage
+  - admin
+
+frontpage es la interfaz de usuario, en donde se maneja la descarga de aplicaciones desde Google Play, su decompilación y un análisis estático preliminar, así como la presentación de la información recopilada y la interfaz de búsqueda. Admin es la interfaz de usuario del administrador, que permite agregar usuarios y configurar la cuenta de Google Play a utilizar. 
+
+Componentes de frontpage:
+
+* urls.py: Aquí se registran las URLs a las que responde frontpage. Cada una tiene su correspondiente función en views.py
+* views.py: Contiene las funciones que determinan qué contenidos se devuelven ante un request determinado.
+* apk_storage.py: Maneja el almacenamiento de los APKs "crudos" en disco.
+* classifier_interface_file.py: Maneja la interfaz con Weka para el análisis heurístico de permisos.
+* constants.py: Deprecated
+* crawler.py: Funciones preliminares para crawlear el Play Store.
+* forms.py: Formularios usados desde views.py para ingreso de datos.
+* git_interface.py: Interface con los repositorios Git locales y el repositorio de GitLab.
+* models.py: Modelos utilizados para persistir los datos en MySQL y ElasticSearch.
+* myindices.py: Se usa para indicarle a Bungiesearch cómo manejar el ingreso a elasticsearch de los datos.
+* packageinfo.py: Hace el trabajo de decompilación y análisis de una aplicación. Llama a Weka y a marvin-static-analyzer.
+* settings.py: Configuración de directorios varios y del GitLab
+* tests.py: Tests, mayormente del Bungiesearch. 
+
+Componentes de admin: nada, es un built-in de administración que viene con el django, pero en el archivo settings.py se configura el acceso a MySQL y Elasticsearch.

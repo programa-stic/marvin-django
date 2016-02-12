@@ -1,0 +1,66 @@
+{% extends "frontpage/base.html" %}
+
+
+{% block content %}
+{% if packages %}
+<h2> Aplicaciones con la vulnerabilidad {{vuln}} </h2>
+<br>
+<table>
+	<tr>
+		<th> App name </th>
+		<th> Package name </th>
+		<th> Version </th>
+		<th> Status </th>		
+		<th> APK </th>
+		<th> Source </th>
+		<th> Delete </th>
+	</tr>
+
+	{% for app in packages %}
+	<tr>
+		<td><a href="/frontpage/{{app.id}}/"> {{app.app_name}} </a></td>
+		<td> {{app.package_name}} </td>
+		<td>{{app.version}} </td>
+		<td>{{app.status}} </td>
+        <td>
+            <form action="/frontpage/{{app.id}}/apk/" method="get">
+                <input type="submit" value="APK"/>
+            </form>
+        </td>
+        <td>
+            <form action="/frontpage/{{app.id}}/src/" method="get">
+                <input type="submit" value="Sources"/>
+            </form>
+        </td>
+        <td>
+            <form action="/frontpage/{{app.id}}/delete/" method="post">
+            	{% csrf_token %}
+                <input type="submit" value="Delete"/>
+            </form>
+        </td>
+	</tr>
+
+		{% endfor %}
+</table>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if packages.has_previous %}
+            <a href="?page={{ packages.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ packages.number }} of {{ packages.paginator.num_pages }}.
+        </span>
+
+        {% if packages.has_next %}
+            <a href="?page={{ packages.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+
+	
+{% else %}
+	<p> No apps available </p>
+{% endif %}
+{% endblock %}

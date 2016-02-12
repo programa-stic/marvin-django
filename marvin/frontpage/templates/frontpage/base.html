@@ -1,0 +1,49 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'frontpage/style.css' %}" />
+    <title>{% block title %}Marvin{% endblock %}</title>
+    <img src="{% static 'frontpage/Marvin.png' %}" />
+    <br>
+</head>
+
+<body>
+    <table>
+    {# <div id="sidebar" class="float-left" width="100px" > #}
+        {% block sidebar %}
+        <tr>
+            <td>
+                <ul>
+                    {% if user.is_authenticated %}
+                        <li>Welcome, {{ user.username }}.</li>
+                    {% else %}
+                        <li>Welcome, new user.<br>Please <a href="/frontpage/login/"> log in.</a></li>
+                    {% endif %}
+                    <li><a href="/frontpage/">Home</a></li>
+                    <li><a href="/frontpage/upload/">Subir archivo</a></li>
+                    <li><a href="/frontpage/search_googleplay/">Buscar app en Google Play</a> 
+                    <li><a href="/frontpage/search_app/">Buscar app en Marvin</a> 
+                    <li><a href="/frontpage/search_source/">Buscar en código</a> 
+                    <li><a href="/frontpage/search_malware/">Malware (heurística)</a>                         
+                    <li><a href="/frontpage/ListaPermisos">Permisos</a></li>
+                    <li><a href="/frontpage/static_vulns/">Vulnerabilidades (s)</a>                         
+                    <li><a href="/frontpage/dynamic_vulns/">Vulnerabilidades (d)</a>                         
+                    <li><a href="/frontpage/logout/">Logout</a></li>                    
+                </ul>
+        {% endblock %}
+            </td>
+
+    {# </div> #}
+
+    {# <div id="content" class="float-right" > #}
+            <td>
+                {% block content %}{% endblock %}
+            </td>
+        </tr>
+    </table>
+    {# </div> #}
+    {% block form %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,30 @@
+{% extends "frontpage/base.html" %}
+
+
+{% block content %}
+<h1> {{details.docV2.title}} </h1>
+<table>
+<tr> <td> Package name</td><td> {{details.docV2.docid}} </td>
+<tr> <td> Version </td><td> {{details.docV2.details.appDetails.versionString}} </td>
+<tr> <td> Author </td><td> {{details.docV2.creator}} </td>
+<tr> <td> Uploaded </td><td> {{details.docV2.details.appDetails.uploadDate}} </td>
+</table>
+
+<h2> Descripcion </h2>
+{{details.docV2.descriptionHtml}}
+<!-- <h2> Análisis según permisos</h2>
+<table>
+<tr> <td>Malware:</td> <td>{{ app.bayesResult }}</td></tr>
+<tr> <td>Confianza en el resultado: </td> <td>{{ app.bayesConfidence }}</td></tr>
+</table> -->
+<h2> Permisos </h2>
+{% for permission in details.docV2.details.appDetails.permission %}
+	{{permission }} <br>
+	{% endfor %}
+
+<form action="/frontpage/Fetch/{{details.docV2.docid}}/" method="POST">
+{% csrf_token %}
+      <input type="submit" value="Descargar de Play Store"/>
+</form>
+ 
+{% endblock %}

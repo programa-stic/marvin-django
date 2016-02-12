@@ -1,0 +1,71 @@
+{% extends "frontpage/base.html" %}
+
+
+{% block content %}
+{% if last_packages %}
+<table>
+	<tr>
+		<th> Nombre aplicación </th>
+		<th> Nombre paquete</th>
+		<th> Versión </th>
+		<th> Status </th>
+        <th> Malware </th>		
+		<th> Confianza </th>
+		<th> Vulns </th>
+		<th>  </th>
+	</tr>
+
+	{% for app in last_packages %}
+	<tr>
+		<td><a href="/frontpage/{{app.id}}/"> {{app.app_name}} </a></td>
+		<td> {{app.package_name}} </td>
+		<td>{{app.version}} </td>
+		<td>{{app.status}} </td>
+        <td>{{app.bayesResult}} </td>
+        <td>{{app.bayesConfidence}} </td>
+        <td>{{app.vulnerabilityresult_set.all.count}} </td>
+        
+<!--         
+        <td> <a href="/frontpage/{{app.id}}/list_sources/"> Listar fuentes </a> </td>
+        <td>
+            <form action="/frontpage/{{app.id}}/apk/" method="get">
+                <input type="submit" value="APK"/>
+            </form>
+        </td>
+        <td>
+            <form action="/frontpage/{{app.id}}/src/" method="get">
+                <input type="submit" value="Fuentes"/>
+            </form>
+        </td>
+        <td>
+            <form action="/frontpage/{{app.id}}/delete/" method="post">
+            	{% csrf_token %}
+                <input type="submit" value="Borrar"/>
+            </form>
+        </td>
+ -->	</tr>
+
+		{% endfor %}
+</table>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if last_packages.has_previous %}
+            <a href="?page={{ last_packages.previous_page_number }}">Anterior</a>
+        {% endif %}
+
+        <span class="current">
+            Página {{ last_packages.number }} de {{ last_packages.paginator.num_pages }}.
+        </span>
+
+        {% if last_packages.has_next %}
+            <a href="?page={{ last_packages.next_page_number }}">Siguiente</a>
+        {% endif %}
+    </span>
+</div>
+
+	
+{% else %}
+	<p>No hay nada aquí, sólo unos días que se aprestan a pasar </p>
+{% endif %}
+{% endblock %}

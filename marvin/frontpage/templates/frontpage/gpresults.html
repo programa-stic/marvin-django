@@ -1,0 +1,53 @@
+{% extends "frontpage/base.html" %}
+
+
+{% block content %}
+{% if packages %}
+<table>
+	<tr>
+		<th> App name </th>
+		<th> Package name </th>
+		<th> Version </th>
+		<th> Author </th>
+        <th> Upload date </th>
+		<th> Downloads </th>
+	</tr>
+
+	{% for app in packages %}
+	<tr>
+		<td><a href="/frontpage/GetDetails/{{app.docid}}"> {{app.title}} </a></td>
+		<td> {{app.docid}} </td>
+        {% if app.details.appDetails.versionString %}
+            <td>{{app.details.appDetails.versionString}} </td>
+        {% else %}
+            <td>{{app.details.appDetails.versionCode}} </td>
+        {% endif %}
+		<td>{{app.creator}} </td>
+        <td>{{app.details.appDetails.uploadDate}} </td>
+        <td>{{app.details.appDetails.numDownloads}} </td>
+	</tr>
+
+		{% endfor %}
+</table>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if packages.has_previous %}
+            <a href="/frontpage/gpresults.html?page={{ packages.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ packages.number }} of {{ packages.paginator.num_pages }}.
+        </span>
+
+        {% if packages.has_next %}
+            <a href="/frontpage/gpresults.html?page={{ packages.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+
+	
+{% else %}
+	<p> No apps available </p>
+{% endif %}
+{% endblock %}
