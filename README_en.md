@@ -86,6 +86,9 @@ Android-checkin: `https://github.com/nviennot/android-checkin`
   	 openjdk 
 
 
-### Contact information ###
+### Credits ###
+  * Juan Heguiabehere ([@jheguia](www.twitter.com/jheguia))
 
-  * Juan Heguiabehere, `jheguia@fundacionsadosky.org.ar`
+### Who do I talk to? ###
+ * Send an email to stic at fundacionsadosky.org.ar
+

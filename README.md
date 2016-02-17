@@ -75,7 +75,8 @@ Android-checkin: `https://github.com/nviennot/android-checkin`
 	  arff
 	  openjdk 
 
+### Créditos ###
+  * Juann Heguiabehere ([@jheguia](www.twitter.com/jheguia))
 
-### Información de contacto ###
-
-  * Juan Heguiabehere, jheguia@fundacionsadosky.org.ar
+### Contacto ###
+* Mandar un correo a stic en el dominio fundacionsadosky.org.ar
