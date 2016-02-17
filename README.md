@@ -2,7 +2,15 @@
 
 Marvin es un sistema que analiza aplicaciones de Android en busca de vulnerabilidades y permite realizar un seguimiento de las mismas a lo largo de su historial de versiones.
 
-* Versión:0.8
+Está compuesto de 4 subsistemas:
+
+* Marvin-django: Una aplicación web que sirve de entrada para el uso y administración del sistema (este repositorio). Incluye un clasificador bayesiano que estima la probabilidad de que una app para Android sea malware.
+* [Marvin-static-Analyzer](https://github.com/programa-stic/Marvin-static-Analyzer): Un sistema de análisis estático de código que usa Androguard y Static Android Analysis Framework (SAAF) para detectar vulnerabilidades.
+* [Marvin-dynamic-Analyzer](https://github.com/programa-stic/Marvin-dynamic-Analyzer): Un sistema de análisis dinámico de código que usa emuladores de Android para x86 y el entorno de virtualización de OpenNebula para detectar vulnerabilidades automáticamente.
+* [Marvin-toqueton](https://github.com/programa-stic/Marvin-toqueton): Una herramienta para pruebas automatizadas de GUIs desarrollada para asistir en la búsqueda de vulnerabildiades al sistema de análisis dinámico de código de Marvin. 
+
+Hay una guía para el usuario de Marvin en la carpetas [docs](https://github.com/programa-stic/marvin-django/tree/master/marvin/docs) de este repositorio.
+
 
 ### Instalación  ###
 
@@ -43,8 +51,7 @@ El script `setup.sh` ejecuta las acciones necesarias para instalar Marvin en una
 	}
 
 
-El script `setup.h` instala una cantidad de paquetes, por lo que al invocar a sudo habrá que introducir la contraseña de administrador. También al instalar MySql 
-pedirá una contraseña para el usuario 'root', y se deberá ingresar esa contraseña cuando más tarde se creen las bases de datos de la aplicación.
+El script `setup.h` instala una cantidad de paquetes, por lo que al invocar a sudo habrá que introducir la contraseña de administrador. También al instalar MySql pedirá una contraseña para el usuario 'root', y se deberá ingresar esa contraseña cuando más tarde se creen las bases de datos de la aplicación.
 
 ### Iniciando Marvin ###
 
@@ -76,7 +83,7 @@ Android-checkin: `https://github.com/nviennot/android-checkin`
 	  openjdk 
 
 ### Créditos ###
-  * Juann Heguiabehere ([@jheguia](www.twitter.com/jheguia))
+  * Juan Heguiabehere ([@jheguia](www.twitter.com/jheguia))
 
 ### Contacto ###
 * Mandar un correo a stic en el dominio fundacionsadosky.org.ar
