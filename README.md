@@ -4,7 +4,7 @@ Marvin es un sistema que analiza aplicaciones de Android en busca de vulnerabili
 
 Está compuesto de 4 subsistemas:
 
-* Marvin-django: Una aplicación web que sirve de entrada para el uso y administración del sistema (este repositorio). Incluye un clasificador bayesiano que estima la probabilidad de que una app para Android sea malware.
+* [Marvin-django](https://github.com/programa-stic/marvin-django): Una aplicación web que sirve de entrada para el uso y administración del sistema (este repositorio). Incluye un clasificador bayesiano que estima la probabilidad de que una app para Android sea malware.
 * [Marvin-static-Analyzer](https://github.com/programa-stic/Marvin-static-Analyzer): Un sistema de análisis estático de código que usa Androguard y Static Android Analysis Framework (SAAF) para detectar vulnerabilidades.
 * [Marvin-dynamic-Analyzer](https://github.com/programa-stic/Marvin-dynamic-Analyzer): Un sistema de análisis dinámico de código que usa emuladores de Android para x86 y el entorno de virtualización de OpenNebula para detectar vulnerabilidades automáticamente.
 * [Marvin-toqueton](https://github.com/programa-stic/Marvin-toqueton): Una herramienta para pruebas automatizadas de GUIs desarrollada para asistir en la búsqueda de vulnerabildiades al sistema de análisis dinámico de código de Marvin. 

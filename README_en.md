@@ -5,7 +5,7 @@ tracking of an app through its version history.
 
 It is composed of 4 subsystems:
 
-* Marvin-django: The web application frontend for use and adminsitration of Marvin (this repostory). It includes a bayesian classifier that provides a probability estimation of a given Android app being malware. 
+* [Marvin-django](https://github.com/programa-stic/marvin-django): The web application frontend for use and adminsitration of Marvin (this repostory). It includes a bayesian classifier that provides a probability estimation of a given Android app being malware. 
 * [Marvin-static-Analyzer](https://github.com/programa-stic/Marvin-static-Analyzer): A static code analysis system that uses Androguard and Static Android Analysis Framework (SAAF). 
 * [Marvin-dynamic-Analyzer](https://github.com/programa-stic/Marvin-dynamic-Analyzer): A dynamic code analysis system that uses Android x86-emualtors and OpenNebula virtualzation to find vulnerabilities automatically
 * [Marvin-toqueton](https://github.com/programa-stic/Marvin-toqueton): An automated GUI testing tool developed to assist Marvin's dynamic code analysis.
