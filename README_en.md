@@ -94,7 +94,7 @@ Android-checkin: `https://github.com/nviennot/android-checkin`
 
 
 ### Credits ###
-  * Juan Heguiabehere ([@jheguia](www.twitter.com/jheguia))
+  * Juan Heguiabehere ([@jheguia](https://www.twitter.com/jheguia))
 
 ### Who do I talk to? ###
  * Send an email to stic at fundacionsadosky.org.ar

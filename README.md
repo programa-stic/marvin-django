@@ -83,7 +83,7 @@ Android-checkin: `https://github.com/nviennot/android-checkin`
 	  openjdk 
 
 ### Créditos ###
-  * Juan Heguiabehere ([@jheguia](www.twitter.com/jheguia))
+  * Juan Heguiabehere ([@jheguia](https://www.twitter.com/jheguia))
 
 ### Contacto ###
 * Mandar un correo a stic en el dominio fundacionsadosky.org.ar
