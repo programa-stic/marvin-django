@@ -59,8 +59,10 @@
 <tr> <td>Malware:</td> <td>{{ app.bayesResult }}</td></tr>
 <tr> <td>Confianza en el resultado: </td> <td>{{ app.bayesConfidence }}</td></tr>
 </table>
-<h2> Permisos </h2>
-<table>
+
+<h3> Permisos: {{ app.permission_set.all|length}} <button id="perms-btn" class="button">Toggle</button></h3>
+
+<table id="perms-tbl" class="permission">
 	<tr>
 		<th> Nombre </th>
 		<th> Nivel de peligro </th>
@@ -68,8 +70,8 @@
 		<th> Descripcion </th>
 	</tr>
 
-	{% for perm in app.permission_set.all %}
-	<tr>
+	{% for perm in app.permission_set.all|dictsort:"perm_danger" %}
+	<tr >
 		<td><a href="/frontpage/Permisos/{{perm.id}}/Aplicaciones/"> {{perm.name}} </a></td>
 		<td> {{perm.perm_danger}} </td>
 		<td> {{perm.app.count}} </td>
@@ -84,32 +86,40 @@
 	<a href="/frontpage/Permisos/{{permission.id}}/Aplicaciones/"> {{permission.name }} </a><br>
 	{% endfor %}
  -->
-<h2> Actividades </h2>
-{% for activity in app.activity_set.all %}
-	<a href="/frontpage/{{app.id}}/classes/{{activity.name}}" target="_blank"> {{activity.name}} </a><br>
+<h3> Actividades: {{ app.activity_set.all|length }} <button id="acts-btn" class="button" >Toggle</button></h3>
+<ul class="activity">
+	{% for activity in app.activity_set.all|dictsort:"name" %}
+	<li style="list-style-type:none"> <a href="/frontpage/{{app.id}}/classes/{{activity.name}}" target="_blank" > {{activity.name}} </a></li>
 	{% endfor %}
+</ul>
 
-<h2> Proveedores </h2>
-{% for provider in app.provider_set.all %}
-	<a href="/frontpage/{{app.id}}/classes/{{provider.name}}" target="_blank"> {{provider.name}} </a><br>
+<h3> Proveedores: {{ app.provider_set.all|length}} <button id="provs-btn" class="button">Toggle</button></h3>
+<ul class="provider">
+{% for provider in app.provider_set.all|dictsort:"name" %}
+	<li style="list-style-type:none"><a href="/frontpage/{{app.id}}/classes/{{provider.name}}" target="_blank"> {{provider.name}} </a></li>
 <!-- 	{{provider.name }} <br> -->
 	{% endfor %}	
+</ul>
 
-<h2> Servicios </h2>
-{% for service in app.service_set.all %}
-	<a href="/frontpage/{{app.id}}/classes/{{service.name}}" target="_blank"> {{service.name}} </a><br>
+<h3> Servicios: {{ app.service_set.all|length}} <button id="servs-btn" class="button">Toggle</button></h3>
+<ul class="service">
+{% for service in app.service_set.all|dictsort:"name" %}
+	<li style="list-style-type:none"><a href="/frontpage/{{app.id}}/classes/{{service.name}}" target="_blank"> {{service.name}} </a></li>
 <!-- 	{{service.name }} <br> -->
 	{% endfor %}	
+</ul>
 
-<h2> Receptores </h2>
-{% for receiver in app.receiver_set.all %}
-	<a href="/frontpage/{{app.id}}/classes/{{receiver.name}} target="_blank""> {{receiver.name}} </a><br>
+<h3> Receptores: {{app.receiver_set.all|length}} <button id="recvs-btn" class="button">Toggle</button></h3>
+<ul class="receiver">
+{% for receiver in app.receiver_set.all|dictsort:"name" %}
+	<li style="list-style-type:none"><a href="/frontpage/{{app.id}}/classes/{{receiver.name}} target="_blank""> {{receiver.name}} </a></li>
 <!-- 	{{receiver.name }} <br> -->
 	{% endfor %}	
+</ul>
 
-<h2> Vulnerabilidades </h2>
+<h3> Vulnerabilidades: {{app.vulnerabilityresult_set.all|length}} <button id="vulns-btn" class="button">Toggle</button> </h3>
 {% if app.vulnerabilityresult_set.all %}
-<table>
+<table class="vulnerabilities">
 	<tr>
 		<th> Nombre </th>
 		<th> Severidad </th>
