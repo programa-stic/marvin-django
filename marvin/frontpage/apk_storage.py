@@ -53,6 +53,8 @@ def get_filepath(package_name, md5):
 	else:
 		if os.path.exists(filepath):
 			return filepath
+		else: 
+			raise Exception ("El archivo no existe, si existiera se llamaria " + filepath)
 
 def retrieve_apk(package_name, md5):
 	filepath = get_filepath(package_name, md5)

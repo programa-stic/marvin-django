@@ -286,20 +286,27 @@ def bayes_analysis(app):
 	app.status = "BAYES_CHECKED"
 	app.save()
 
-@processify
 def vuln_analysis_retry(app):
-		t = threading.Thread (target=vuln_analysis, args=(app, myPackage, d, dx))
+		t = threading.Thread (target=vuln_analysis_retry_worker, args=(app,))
 		#threads = list()
 		#threads.append(t)
+		print "Empezando el thread"
 		t.start()
+		#t.join()
 		return "Gracias vuelva prontos"
 
+@processify
 def vuln_analysis_retry_worker(app):
+	print "entrando a retry_worker"
 	try:
+		#print "Consiguiendo filename, package_name:" + app.package_name
 		filename = get_filepath(app.package_name, app.md5)
+		#print "filename:"+filename
 		(myPackage, d, dx) = AnalyzeAPK(filename)
+		#print "Datos recuperados"
 		vuln_analysis(app, myPackage, d, dx)
 	except Exception as poof:
+		#print "Error en retry: " + repr(poof)
 		logging.error ("Exception en analisis de vulnerabilidades: " + repr (poof))
 
 
@@ -312,6 +319,7 @@ def decompile(app):
 	save_sources_worker(d, app, overrides)
 
 def vuln_analysis(app, apk, d, dx):
+    print "Entrando a vuln_analysis"
     prefix1 = app.md5[0:2]
     prefix2 = app.md5[2:4]
     dir_path = settings.root_apk_dir + '/' + prefix1 + '/' + prefix2 + '/'
