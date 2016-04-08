@@ -2,6 +2,21 @@
 
 
 {% block content %}
+
+<script>
+function toggle_vuln(vuln_id){
+	var req = new XMLHttpRequest();
+	req.open("GET","/frontpage/vuln/"+vuln_id+"/toggleDynTest");
+	req.send(null);
+	newval = req.getResponseHeader("sched");
+	clickedButton = document.getElementById("dyntest-"+vuln_id);
+	clickedButton.textContent = "Hola"
+	// myTextElement = clickedButton.parentElement.previousSibling.firstChild;
+	// myTextElement.textContent = newval
+}
+
+</script>
+
 <h1> {{app.app_name}} </h1>
 <table>
 <tr> <td> Package name</td><td> {{app.package_name}} </td>
@@ -9,7 +24,7 @@
 {% if app.app_metadata_set.all %}
 	{% for md in app.app_metadata_set.all %}
 		<tr> <td> Subida a Google Play </td> <td> {{md.date_upload}} </td> </tr>
-		<tr> <td> Autor </td> <td> {{md.author}} </td> </tr>
+		<tr> <td> Autor </td> <td> <a href="/frontpage/Autor/{{md.author}}"> {{md.author}} </td> </tr>
 		<tr> <td> Nombre en Google Play </td> <td> {{md.app_name}} </td> </tr>
 		<tr> <td> Subida a Google Play </td> <td> {{md.date_upload}} </td> </tr>
 		<tr> <td> Enlace Google Play </td> <td> <a href="https://play.google.com/store/apps/details?id={{ app.package_name }}"> Última versión </a> </td> </tr>
@@ -53,7 +68,10 @@
 
 </table>
 
-
+{% if app.app_metadata_set.all %}
+<h2> Descripción </h2>
+{{ app.app_metadata_set.first.description}}
+{% endif %}
 <h2> Análisis según permisos</h2>
 <table>
 <tr> <td>Malware:</td> <td>{{ app.bayesResult }}</td></tr>
@@ -126,11 +144,17 @@
 		<th> Clase </th>
 		<th> Método </th>
 		<th> Pruebas dinámicas </th>
+		<th> PD habilitada <th>
 <!-- 		<th> Descripcion </th> -->
 	</tr>
 
 	{% for vuln in app.vulnerabilityresult_set.all|dictsortreversed:"severity" %}
-	<tr>
+		{% if vuln.dynamictestresults_set.first.status == "SUCCESS" %}
+			<tr class="verified" >
+		{% else %}
+			<tr	class ="normal">
+		{% endif %}
+		
 		<td>
 			<a href="/frontpage/{{vuln.id}}/DetalleVuln/"> {{ vuln.name }} </a> 
 		</td>
@@ -151,10 +175,21 @@
 		<td>
 			{{vuln.dynamicTest}}
 		</td>
+		<td>
+			{% if vuln.dynamicTest %}
+			<input type="checkbox" 
+			  {% if vuln.scheduledForDT %}
+				checked
+			  {% endif %}
+			  onClick = "toggle_vuln({{vuln.id}})" >
+			{% endif %}
+		</td>
 <!-- 		<td>
-			{{vuln.description}}
-		</td> -->
-	</tr>
+			{% if vuln.dynamicTest %}
+			<button id="dyntest-{{vuln.id}}" onclick="toggle_vuln({{vuln.id}})" class="button">Toggle</button>
+			{% endif %}
+		</td> 
+ -->	</tr>
 	{% endfor %}
 </table>
 {% elif app.status != 'Vulns checked' %}

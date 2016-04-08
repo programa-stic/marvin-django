@@ -39,13 +39,17 @@ from djgpa.api import GooglePlay
 from .forms import UploadFileForm, SearchForm
 from packageinfo import process_package, vuln_analysis_retry
 from git_interface import borrar_repo
+from queue_handler import queue_for_dl
 import constants
 import MarvinStaticAnalyzer
 import io
+import logging
 
 import settings
 
 import apk_storage
+
+api = GooglePlay().auth()
 
 # Create your views here.
 
@@ -86,13 +90,35 @@ def vuln_check(request, pk):
 	return HttpResponseRedirect('/frontpage/'+pk+'/')
 
 @login_required
+def toggleDynTest(request, pk):
+	myVulnResult = get_object_or_404 (VulnerabilityResult,pk=pk)
+	print "toggleDynTest: vuln #"+ str(pk)
+	print "  name: " + myVulnResult.name
+	print "  scheduled: " + str(myVulnResult.scheduledForDT)
+	if myVulnResult.scheduledForDT == True:
+		myVulnResult.scheduledForDT = False
+	else:
+		myVulnResult.scheduledForDT = True
+	myVulnResult.save()
+	#context = {'result':myVulnResult.scheduledForDT}
+	response = HttpResponse()
+	response['sched'] = myVulnResult.scheduledForDT
+	return response
+
+
+@login_required
 def upload_file(request):
 	myToken = csrf(request)
 	if request.method == 'POST':
 		form = UploadFileForm(request.POST, request.FILES)
 		if form.is_valid():
 			print repr(request.FILES['file'])
-			myApp = process_package(request.FILES['file'], None)
+			myFile = tempfile.NamedTemporaryFile()
+			contents = request.FILES['file'].read()
+			myFile.write(contents)
+			myFile.seek(0)
+			myApp = process_package(myFile, None)
+			#myApp = process_package(request.FILES['file'], None)
 			if isinstance(myApp, App):
 				return HttpResponseRedirect('/frontpage/'+str(myApp.id)+'/')
 			else:
@@ -120,6 +146,21 @@ def detected_as_malware(request):
 	context = {'last_packages':last_packages}
 	return render_to_response('frontpage/index2.html', RequestContext(request, context))
 
+def author(request, pk):
+	appsFound = App.objects.filter(app_metadata__author = pk).order_by("app_name")
+	context = {'last_packages':appsFound}
+	paginator = Paginator(appsFound, 20)
+	page = request.GET.get('page')
+	try:
+		last_packages = paginator.page(page)
+	except PageNotAnInteger:
+		last_packages = paginator.page(1)
+	except EmptyPage:
+		last_packages = paginator.page(paginator.num_pages)
+	context = {'last_packages':last_packages}
+	return render_to_response('frontpage/index2.html', RequestContext(request, context))
+
+
 def list_vulnerable_apps(request, vuln_name):
 	appsFound = set(App.objects.filter(vulnerabilityresult__name=vuln_name))
 	appsFound = list(appsFound)
@@ -134,6 +175,37 @@ def list_vulnerable_apps(request, vuln_name):
 		last_packages = paginator.page(paginator.num_pages)
 	context = {'packages':last_packages,'vuln':vuln_name}
 	return render_to_response('frontpage/apps_by_vuln.html', RequestContext(request, context))
+
+def list_verified_vulns(request):
+	vulnsFound = VulnerabilityResult.objects.filter(dynamictestresults__status="SUCCESS")
+	#context = {'last_packages':appsFound}
+	#appsFound = map(lambda vuln:vuln.app, vulnsFound)
+	paginator = Paginator(vulnsFound, 20)
+	page = request.GET.get('page')
+	try:
+		last_packages = paginator.page(page)
+	except PageNotAnInteger:
+		last_packages = paginator.page(1)
+	except EmptyPage:
+		last_packages = paginator.page(paginator.num_pages)
+	context = {'vulns':last_packages}
+	return render_to_response('frontpage/discovered_vulns.html', RequestContext(request, context))
+
+def list_enabled_vulns(request):
+	vulnsFound = VulnerabilityResult.objects.filter(scheduledForDT=True)
+	#context = {'last_packages':appsFound}
+	#appsFound = map(lambda vuln:vuln.app, vulnsFound)
+	paginator = Paginator(vulnsFound, 20)
+	page = request.GET.get('page')
+	try:
+		last_packages = paginator.page(page)
+	except PageNotAnInteger:
+		last_packages = paginator.page(1)
+	except EmptyPage:
+		last_packages = paginator.page(paginator.num_pages)
+	context = {'vulns':last_packages}
+	return render_to_response('frontpage/enabled_vulns.html', RequestContext(request, context))
+
 
 
 def list_static_vulns(request):
@@ -167,9 +239,22 @@ def search_source(request):
 		if form.is_valid():
 			searchterms = request.POST['terms']
 			filesFound = Sourcefile.objects.search.query('match', _all=searchterms)
-			newFF = filesFound.params(size=min(filesFound.count(), 100)).execute()
-			newFF.sort(key=lambda file: file.app.app_name)
-			context = {'sourcefiles':newFF, 'search_result': True}
+			newFF = filesFound.params(size=filesFound.count()).execute()
+			newFF = filter((lambda x: x!=None), newFF)
+			paginator = Paginator(newFF, 20)
+			page = request.GET.get('page')
+			try:
+				newFF2 = paginator.page(page)
+				#newFF = filesFound.params(size=20, from_=(page-1)*20).execute()
+			except PageNotAnInteger:
+				#newFF = filesFound.params(size=20).execute()
+				newFF2 = paginator.page(1)			
+			except EmptyPage:
+				newFF2 = paginator.page[paginator.num_pages]
+#			except TypeError: 
+#				newFF2 = newFF.params(size=20).execute()
+			#newFF2.sort(key=lambda file: file.app.app_name)
+			context = {'sourcefiles':newFF2, 'search_result': True, 'terms':searchterms}
 			return render_to_response('frontpage/sourcefile_list.html', RequestContext(request, context))
 		else:
 			return HttpResponseRedirect('frontpage/search_source.html',myDict)
@@ -235,7 +320,6 @@ def dirtybastard(numDownloadsString):
 	return int(numDownloadsString[0])+10*len(numDownloadsString)
 
 def search_googleplay(request):
-	api = GooglePlay().auth()
 	myToken = csrf(request)
 	if request.method == 'POST':
 		form = SearchForm(request.POST)
@@ -265,7 +349,7 @@ def search_googleplay(request):
 		return render_to_response('frontpage/search_source.html/',myDict)
 
 def app_details(request, pk):
-	api = GooglePlay().auth()
+#	api = GooglePlay().auth()
 	details = api.details(pk)
 	context = {'details':details}
 	return render_to_response('frontpage/app_metadata.html', RequestContext(request, context))
@@ -273,9 +357,15 @@ def app_details(request, pk):
 def error(request):
 	return render_to_response('frontpage/error.html', RequestContext(request))
 
+def app_fetch_queued(request, pk):
+	myToken = csrf(request)
+	details = api.details(pk)
+	queue_for_dl(pk, details)
+	return HttpResponseRedirect('/frontpage/')
+
 def app_fetch(request, pk):
 	myToken = csrf(request)
-	api = GooglePlay().auth()
+#	api = GooglePlay().auth()
 	myFile = tempfile.NamedTemporaryFile()
 	success = api.download(pk, myFile.name)
 	if success:
