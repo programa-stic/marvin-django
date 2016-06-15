@@ -22,6 +22,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+from django.contrib.auth.models import User
 from django.db import models
 from bungiesearch.managers import BungiesearchManager
 # Create your models here.
@@ -90,7 +91,6 @@ class App_metadata(models.Model):
 	
 	class Meta:
 		app_label = 'frontpage'
-
 
 class Permission(models.Model):
 	name = models.CharField(max_length=100)
@@ -189,6 +189,28 @@ class DynamicTestResults(models.Model):
 		app_label = 'frontpage'
 
 
+class App_comments(models.Model):
+	author = models.ForeignKey(User)
+	app = models.ForeignKey(App)
+	vuln = models.ForeignKey(VulnerabilityResult, null=True)
+	contents = models.TextField()
+	objects = BungiesearchManager()
+	#app = models.ForeignKey(App)
+
+	def __unicode__(self):
+		return self.contents
+	
+	class Meta:
+		app_label = 'frontpage'
+
+class Java_package(models.Model):
+	package_name = models.CharField(max_length=300)
+	app = models.ManyToManyField(App)
+	#objects = BungiesearchManager()
+	#app = models.ForeignKey(App)
+
+	def __unicode__(self):
+		return self.package_name
 
 # class NoUpdatedField(models.Model):
 # 	package_name = models.CharField(max_length=150, db_index=True)

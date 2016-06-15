@@ -142,6 +142,8 @@ def add_other_files(app, myRepo, myIndex, overrides):
 	file_name = get_filepath(app.package_name, app.md5)
 	zipfile = ZipFile (file_name, 'r')
 	for filename in zipfile.namelist():
+		if filename.endswith('/'):
+			continue
 		if filename in overrides:
 			logging.info ("Storing "+ filename +" from overrides\n")
 			myBytes = overrides[filename]

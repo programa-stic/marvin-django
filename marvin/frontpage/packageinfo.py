@@ -151,6 +151,17 @@ def process_package(myfile, app_md):
 	t.start()
 	return "Nothing to see yet, move along"
 
+def find_packages(myApp):
+	myFileContents = map (lambda element :element.file_contents, myApp.sourcefile_set.all())
+	myPackageLines = map (lambda file:
+							filter (lambda text: 
+								text.startswith("package"), 
+								file.split(";")), 
+							myFileContents)
+	myPackageLines = filter (lambda list: len(list)>0, myPackageLines)
+	myPackages = set(map (lambda text: text[0].split(" ")[1], myPackageLines))
+	return myPackages
+
 @processify
 def process_package_worker(myfile, app_md):
 	logging.info ("Entrando a process_package")
@@ -275,6 +286,17 @@ def save_sources_worker(d, app, overrides):
 	gitlab_upload_app(app, overrides)
 	app.sourcesUploaded = True
 	app.save()
+	packages = find_packages(app)
+	for package in packages:
+		existing = len(Java_package.objects.filter(package_name=package))
+		if existing == 0:
+			newPackage = Java_package(package_name = package)
+			newPackage.save()
+			newPackage.app.add(app)
+			newPackage.save()
+		else:
+			myPackage = Java_package.objects.get(package_name=package)
+			myPackage.app.add(app)
 	logging.info ("Clases decompiladas")
 
 def bayes_analysis(app):
@@ -401,6 +423,14 @@ def get_app_name(a, d):
                                         resource_name = element.get_name()
                                         app_name = res.get_string(package_name, resource_name)[1]
         return app_name
+
+def reset_error(vuln):
+	myVuln = VulnerabilityResult.objects.get(pk=vuln)
+	myDr   = myVuln.dynamictestresults_set.first()
+	if myDr.status == "ERROR":
+		myDr.status = "UNKNOWN"
+		myDr.description = ""
+		myDr.save()
 
 # 		classifier_report = classifier_interface_file.evaluate_apk(permissions, perms_list_file, model_file)
 # 		marvin_es.store_cr(package_name, classifier_report)

@@ -130,10 +130,26 @@ function toggle_vuln(vuln_id){
 <h3> Receptores: {{app.receiver_set.all|length}} <button id="recvs-btn" class="button">Toggle</button></h3>
 <ul class="receiver">
 {% for receiver in app.receiver_set.all|dictsort:"name" %}
-	<li style="list-style-type:none"><a href="/frontpage/{{app.id}}/classes/{{receiver.name}} target="_blank""> {{receiver.name}} </a></li>
+	<li style="list-style-type:none"><a href="/frontpage/{{app.id}}/classes/{{receiver.name}}" target="_blank"> {{receiver.name}} </a></li>
 <!-- 	{{receiver.name }} <br> -->
 	{% endfor %}	
 </ul>
+
+<h3> Paquetes: {{app.java_package_set.all|length}} <button id="pkgs-btn" class="button">Toggle</button> </h3>
+<table class="packages">
+	<tr> <th> Nombre </th> <th> Link al repositorio</th></tr>
+	{% for package in app.java_package_set.all|dictsort:"package_name" %}
+		<tr>
+			<td>
+				<a href="/frontpage/Packages/{{package.id}}/Aplicaciones/"> {{ package.package_name}} </a> 
+			</td>
+			<td>
+				<a href="/frontpage/{{app.id}}/packages/{{package.package_name}}" target="_blank"> Link </a>
+			</td>
+		</tr>
+	{% endfor %}
+
+</table>
 
 <h3> Vulnerabilidades: {{app.vulnerabilityresult_set.all|length}} <button id="vulns-btn" class="button">Toggle</button> </h3>
 {% if app.vulnerabilityresult_set.all %}

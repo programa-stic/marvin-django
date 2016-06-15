@@ -26,7 +26,7 @@ from os.path import getsize
 import tempfile, zipfile
 from django.shortcuts import render, get_object_or_404, render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
-from frontpage.models import App, VulnerabilityResult, Permission, Sourcefile
+from frontpage.models import *
 # from django.template import RequestContext
 from django.views.generic import ListView, DetailView
 from django.core.context_processors import csrf
@@ -36,7 +36,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from djgpa.api import GooglePlay
-from .forms import UploadFileForm, SearchForm
+from .forms import UploadFileForm, SearchForm, CommentForm
 from packageinfo import process_package, vuln_analysis_retry
 from git_interface import borrar_repo
 from queue_handler import queue_for_dl
@@ -69,6 +69,55 @@ class AppDetailView(DetailView):
 class VulnDetailView(DetailView):
 	model = VulnerabilityResult
 
+@login_required
+def vulnDetail(request, pk):
+#	if request.method == "GET":
+	myVuln = get_object_or_404 (VulnerabilityResult, pk=pk)
+	myForm = CommentForm()
+	context = {'object':myVuln, 'form':myForm}
+	return render_to_response('frontpage/vulnerabilityresult_detail.html', RequestContext(request, context))
+	# else:
+	# 	if request.method == "POST":
+	# 		myForm = CommentForm(request.POST)
+	# 		myVuln = get_object_or_404 (VulnerabilityResult, pk=pk)
+	# 		if form.is_valid():
+	# 			comment = myForm.cleaned_data['text']
+	# 			user = request.user
+	# 			new_comment = App_comments(contents = comment,
+	# 									   author = request.user,
+	# 									   vuln = myVuln,
+	# 									   app = myVuln.app)
+	# 			new_comment.save()
+
+def addComment(request,pk):
+	myVuln = get_object_or_404 (VulnerabilityResult, pk=pk)
+	if request.method == "POST":
+		myForm = CommentForm(request.POST)
+		#myVuln = get_object_or_404 (VulnerabilityResult, pk=pk)
+		if myForm.is_valid():
+			comment = myForm.cleaned_data['text']
+			user = request.user
+			new_comment = App_comments(author = request.user,
+									   contents = comment,
+									   vuln = myVuln,
+									   app = myVuln.app)
+			new_comment.save()
+		context = {'object':myVuln, 'form':myForm}
+		return render_to_response('frontpage/vulnerabilityresult_detail.html', RequestContext(request, context))
+	else:
+		myForm = CommentForm()
+		context = {'object':myVuln, 'form':myForm}
+		return render_to_response('frontpage/vulnerabilityresult_detail.html', RequestContext(request, context))
+
+def deleteComment(request,pk):
+	myComment = get_object_or_404 (App_comments, pk=pk)
+	myVuln = myComment.vuln
+	myComment.delete()
+	myForm = CommentForm(request.POST)
+	context = {'object':myVuln, 'form':myForm}
+	return render_to_response('frontpage/vulnerabilityresult_detail.html', RequestContext(request, context))
+
+
 def appsByPermission(request, pk):
 	myPerm = get_object_or_404 (Permission, pk=pk)
 	object_list = myPerm.app.all()
@@ -83,6 +132,22 @@ def appsByPermission(request, pk):
 	context = {'packages': packages, 'perm':myPerm}
 	#context.update(csrf(request))
 	return render_to_response('frontpage/apps_by_permission.html', RequestContext(request, context))
+
+def appsByPackage(request, pk):
+	myPackage = get_object_or_404 (Java_package, pk=pk)
+	object_list = myPackage.app.all()
+	paginator = Paginator(object_list, 10)
+	page = request.GET.get('page')
+	try:
+		packages = paginator.page(page)
+	except PageNotAnInteger:
+		packages = paginator.page(1)
+	except EmptyPage:
+		packages = paginator.page(paginator.num_pages)
+	context = {'packages': packages, 'package':myPackage}
+	#context.update(csrf(request))
+	return render_to_response('frontpage/apps_by_package.html', RequestContext(request, context))
+
 
 def vuln_check(request, pk):
 	myApp = get_object_or_404 (App, pk=pk)
@@ -257,7 +322,40 @@ def search_source(request):
 			context = {'sourcefiles':newFF2, 'search_result': True, 'terms':searchterms}
 			return render_to_response('frontpage/sourcefile_list.html', RequestContext(request, context))
 		else:
-			return HttpResponseRedirect('frontpage/search_source.html',myDict)
+			return HttpResponseRedirect('/frontpage/search_source/')
+	else:
+		myToken = csrf(request)
+		form = SearchForm()
+		myDict = {'form':form, "title":"Buscar en codigo fuente"}
+		myDict.update(myToken)
+		return render_to_response('frontpage/search_source.html',myDict)
+
+def search_sourcefile(request):
+	myToken = csrf(request)
+	if request.method == 'POST':
+		form = SearchForm(request.POST)
+		if form.is_valid():
+			searchterms = request.POST['terms']
+			filesFound = Sourcefile.objects.filter(file_name=searchterms)
+			newFF = filesFound.params(size=filesFound.count()).execute()
+			newFF = filter((lambda x: x!=None), newFF)
+			paginator = Paginator(newFF, 20)
+			page = request.GET.get('page')
+			try:
+				newFF2 = paginator.page(page)
+				#newFF = filesFound.params(size=20, from_=(page-1)*20).execute()
+			except PageNotAnInteger:
+				#newFF = filesFound.params(size=20).execute()
+				newFF2 = paginator.page(1)			
+			except EmptyPage:
+				newFF2 = paginator.page[paginator.num_pages]
+#			except TypeError: 
+#				newFF2 = newFF.params(size=20).execute()
+			#newFF2.sort(key=lambda file: file.app.app_name)
+			context = {'sourcefiles':newFF2, 'search_result': True, 'terms':searchterms}
+			return render_to_response('frontpage/sourcefile_list.html', RequestContext(request, context))
+		else:
+			return HttpResponseRedirect('/frontpage/search_source/')
 	else:
 		myToken = csrf(request)
 		form = SearchForm()
@@ -295,6 +393,25 @@ def show_activity(request, pk, activity_name):
 		except Exception as errmsg:
 			context = {"errmsg": "La clase "+ activity_name+" no se halla en el repositorio, puede suceder que haya .DEX suplementarios. "+ str(errmsg)}
 			return render_to_response('frontpage/error.html', RequestContext(request, context))
+
+def show_package_sources(request, pk, package_name):
+	myApp = App.objects.get(pk=pk)
+	# if package_name.endswith('.java'):
+	# 	package_name = package_name[0:len(package_name)-5]
+	# 	classpath = activity_name.replace('.','/')
+	# 	gitname = myApp.package_name.replace('.','-').lower()
+	# 	url = settings.gitlab_url+'/marvin/'+gitname+'/tree/'+myApp.version+'/'+classpath+'.java'	
+	# 	return HttpResponseRedirect(url)	
+	# else:
+	try:
+		classpath = package_name.replace('.','/')
+		#mySF = myApp.sourcefile_set.get(file_name=classpath)
+		gitname = myApp.package_name.replace('.','-').lower()
+		url = settings.gitlab_url+'/marvin/'+gitname+'/tree/'+myApp.version+'/'+classpath
+		return HttpResponseRedirect(url)
+	except Exception as errmsg:
+		context = {"errmsg": "La clase "+ package_name+" no se halla en el repositorio, puede suceder que haya .DEX suplementarios. "+ str(errmsg)}
+		return render_to_response('frontpage/error.html', RequestContext(request, context))
 
 def search_app(request):
 	myToken = csrf(request)
@@ -351,7 +468,15 @@ def search_googleplay(request):
 def app_details(request, pk):
 #	api = GooglePlay().auth()
 	details = api.details(pk)
-	context = {'details':details}
+	package_name = details.docV2.details.appDetails.packageName
+	version = details.docV2.details.appDetails.versionString
+	present = App.objects.filter(package_name=package_name, version=version)
+	if len(present)>0:
+		inBase = True
+		context = {'details':details, 'present': inBase, 'app':present[0]}
+	else:
+		inBase = False
+		context = {'details':details, 'present': inBase}
 	return render_to_response('frontpage/app_metadata.html', RequestContext(request, context))
 
 def error(request):

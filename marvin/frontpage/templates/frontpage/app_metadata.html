@@ -22,9 +22,15 @@
 	{{permission }} <br>
 	{% endfor %}
 
+
+{% if present == False %}
 <form action="/frontpage/Fetch/{{details.docV2.docid}}/" method="POST">
 {% csrf_token %}
       <input type="submit" value="Descargar de Play Store"/>
 </form>
+{% else %}
+<h2> Esta versión del paquete ya está en la base </h2>
+<a href="/frontpage/{{app.id}}/"> {{app.app_name}} </a>
+{% endif %}
  
 {% endblock %}
