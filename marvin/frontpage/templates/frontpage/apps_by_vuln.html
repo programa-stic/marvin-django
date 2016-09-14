@@ -11,18 +11,18 @@
 		<th> Package name </th>
 		<th> Version </th>
 		<th> Status </th>		
-		<th> APK </th>
+<!-- 		<th> APK </th>
 		<th> Source </th>
 		<th> Delete </th>
-	</tr>
+ -->	</tr>
 
-	{% for app in packages %}
+	{% for vuln in packages %}
 	<tr>
-		<td><a href="/frontpage/{{app.id}}/"> {{app.app_name}} </a></td>
-		<td> {{app.package_name}} </td>
-		<td>{{app.version}} </td>
-		<td>{{app.status}} </td>
-        <td>
+		<td><a href="/frontpage/{{vuln.id}}/DetalleVuln/"> {{vuln.app.app_name}} </a></td>
+		<td><a href="/frontpage/{{vuln.app.id}}/">  {{vuln.app.package_name}}</a> </td>
+		<td>{{vuln.app.version}} </td>
+		<td>{{vuln.app.status}} </td>
+<!--         <td>
             <form action="/frontpage/{{app.id}}/apk/" method="get">
                 <input type="submit" value="APK"/>
             </form>
@@ -38,7 +38,7 @@
                 <input type="submit" value="Delete"/>
             </form>
         </td>
-	</tr>
+ -->	</tr>
 
 		{% endfor %}
 </table>

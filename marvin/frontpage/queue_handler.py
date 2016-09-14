@@ -47,6 +47,9 @@ def queue_for_dl(package_name, app_md):
 	                  properties = pika.BasicProperties(delivery_mode = 2), 
 	                  mandatory = 1)
 
+#def queue_for_androlyze(app):
+	
+
 def marshal_name_version (package_name, version_string):
 	myDict = {'package_name':package_name,
 			  'version_string': version_string}

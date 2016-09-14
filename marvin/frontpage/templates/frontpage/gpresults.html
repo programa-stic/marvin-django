@@ -9,6 +9,7 @@
 		<th> Package name </th>
 		<th> Version </th>
 		<th> Author </th>
+        <th> Free   </th>
         <th> Upload date </th>
 		<th> Downloads </th>
 	</tr>
@@ -23,6 +24,11 @@
             <td>{{app.details.appDetails.versionCode}} </td>
         {% endif %}
 		<td>{{app.creator}} </td>
+        {% if app.offer.0.micros > 0 %}
+            <td> No </td>
+        {% else %}
+            <td> Yes </td>
+        {% endif %}
         <td>{{app.details.appDetails.uploadDate}} </td>
         <td>{{app.details.appDetails.numDownloads}} </td>
 	</tr>

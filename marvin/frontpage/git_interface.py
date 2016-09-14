@@ -114,7 +114,8 @@ def stage_apk(app, overrides):
 		#myTreeGen.insert(sourcefile.file_name, contents, pygit2.GIT_FILEMODE_BLOB)
 	#myTree = myTreeGen.write()
 	myTree    = myIndex.write_tree()
-	version   = app.version
+	version   = app.version.replace(' ','_')
+	print "App version: " + version
 	author    = pygit2.Signature("Alice Author", "alice@authors.tld")
 	committer = pygit2.Signature("Alice Author", "alice@authors.tld")
 	if master == None:

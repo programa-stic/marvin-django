@@ -24,10 +24,14 @@
 
 
 {% if present == False %}
-<form action="/frontpage/Fetch/{{details.docV2.docid}}/" method="POST">
-{% csrf_token %}
+ {% if details.docV2.offer.0.micros == 0 %}
+  <form action="/frontpage/Fetch/{{details.docV2.docid}}/" method="POST">
+   {% csrf_token %}
       <input type="submit" value="Descargar de Play Store"/>
-</form>
+  </form>
+ {% else %}
+  <h2> Este paquete no es gratis </h2> 
+ {% endif %}
 {% else %}
 <h2> Esta versión del paquete ya está en la base </h2>
 <a href="/frontpage/{{app.id}}/"> {{app.app_name}} </a>

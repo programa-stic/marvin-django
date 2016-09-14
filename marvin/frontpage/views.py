@@ -227,10 +227,9 @@ def author(request, pk):
 
 
 def list_vulnerable_apps(request, vuln_name):
-	appsFound = set(App.objects.filter(vulnerabilityresult__name=vuln_name))
-	appsFound = list(appsFound)
+	vulnsFound = VulnerabilityResult.objects.filter(name=vuln_name)
 	#context = {'last_packages':appsFound}
-	paginator = Paginator(appsFound, 20)
+	paginator = Paginator(vulnsFound, 20)
 	page = request.GET.get('page')
 	try:
 		last_packages = paginator.page(page)
@@ -241,8 +240,9 @@ def list_vulnerable_apps(request, vuln_name):
 	context = {'packages':last_packages,'vuln':vuln_name}
 	return render_to_response('frontpage/apps_by_vuln.html', RequestContext(request, context))
 
+
 def list_verified_vulns(request):
-	vulnsFound = VulnerabilityResult.objects.filter(dynamictestresults__status="SUCCESS")
+	vulnsFound = VulnerabilityResult.objects.filter(dynamictestresults__status="SUCCESS").order_by('dynamictestresults__last_check')
 	#context = {'last_packages':appsFound}
 	#appsFound = map(lambda vuln:vuln.app, vulnsFound)
 	paginator = Paginator(vulnsFound, 20)

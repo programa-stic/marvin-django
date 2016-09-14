@@ -101,6 +101,7 @@ def callback(ch, method, properties, body):
     else:
         print "Dummy, dumping message: %r" % body
         ch.basic_ack(delivery_tag = method.delivery_tag)
+        sys.exit(0)
     #connection.close()
     #ch.basic_ack(delivery_tag = method.delivery_tag)
 

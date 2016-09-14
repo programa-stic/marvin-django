@@ -424,6 +424,14 @@ def get_app_name(a, d):
                                         app_name = res.get_string(package_name, resource_name)[1]
         return app_name
 
+def reset_errors():
+	myVulns = DynamicTestResults.objects.filter(status="ERROR")
+	for vuln in myVulns:
+		if vuln.count < 1000:
+			vuln.status = "UNKNOWN"
+			print "App: "+ vuln.vuln.app.app_name + ", vuln: "+vuln.vuln.name + ", count: "+ str(vuln.count)
+			vuln.save()
+
 def reset_error(vuln):
 	myVuln = VulnerabilityResult.objects.get(pk=vuln)
 	myDr   = myVuln.dynamictestresults_set.first()

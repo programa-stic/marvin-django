@@ -155,6 +155,7 @@ class Service(models.Model):
 class VulnerabilityResult(models.Model):
 	name        = models.CharField(max_length=150)
 	description = models.TextField()
+	details     = models.TextField(null=True, blank=True)
 	confidence  = models.CharField(max_length=10, null=True)
 	severity    = models.CharField(max_length=20, null=True)
 	dynamicTest = models.BooleanField(default=False)

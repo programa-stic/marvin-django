@@ -9,12 +9,20 @@
 	<th>Nombre app</th>
 	<td>Versión </td>
 	<td>Subida a Marvin </td>
+    <td>Fecha verif.</td>
+    <td>Intentos</td>    
 </tr>
 {% for vuln in vulns %}
  <tr> <td> <a href="/frontpage/{{vuln.id}}/DetalleVuln" />{{vuln.name}} </td> 
      <td> <a href="/frontpage/{{vuln.app.id}}"/>{{vuln.app.app_name}} </td>
      <td> {{vuln.app.version}} </td>
      <td> {{vuln.app.uploaded}} </td>
+{% if vuln.dynamictestresults_set.all %}
+  {% for dyntest in vuln.dynamictestresults_set.all %}
+     <td> {{dyntest.last_check}}</td>
+     <td> {{dyntest.count}}</td>
+  {% endfor %}
+{% endif %}
  </tr>
 {% endfor %}
 </table>
