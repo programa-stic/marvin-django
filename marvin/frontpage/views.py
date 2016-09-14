@@ -242,7 +242,7 @@ def list_vulnerable_apps(request, vuln_name):
 
 
 def list_verified_vulns(request):
-	vulnsFound = VulnerabilityResult.objects.filter(dynamictestresults__status="SUCCESS").order_by('dynamictestresults__last_check')
+	vulnsFound = VulnerabilityResult.objects.filter(dynamictestresults__status="SUCCESS").order_by('-dynamictestresults__last_check')
 	#context = {'last_packages':appsFound}
 	#appsFound = map(lambda vuln:vuln.app, vulnsFound)
 	paginator = Paginator(vulnsFound, 20)
