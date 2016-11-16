@@ -145,11 +145,14 @@ def add_other_files(app, myRepo, myIndex, overrides):
 	for filename in zipfile.namelist():
 		if filename.endswith('/'):
 			continue
+		if (filename.find(".git/") > 0):
+			continue
 		if filename in overrides:
 			logging.info ("Storing "+ filename +" from overrides\n")
 			myBytes = overrides[filename]
 		else:
 			myBytes = zipfile.read(filename)
+			print "add_other_files: Storing "+filename+"from zip"
 			logging.info ("Storing "+filename+"from zip")
 		contents = myRepo.create_blob(myBytes)
 		myIndex.add(pygit2.IndexEntry(filename, contents, pygit2.GIT_FILEMODE_BLOB))

@@ -30,8 +30,8 @@
 	{% for file in sourcefiles %}
 	<tr>
 		{% if search_result %}
-			<td> <a href="/frontpage/{{file.app.id}}/classes/{{file.file_name}}"> {{file.file_name}} </a> </td>
 			<td><a href="/frontpage/{{file.app.id}}/"> {{file.app.app_name}} </a></td>
+			<td> <a href="/frontpage/{{file.app.id}}/classes/{{file.file_name}}"> {{file.file_name}} </a> </td>
 		{% endif %}
 		<td> {{file.file_contents|length}} </td>
 	</tr>

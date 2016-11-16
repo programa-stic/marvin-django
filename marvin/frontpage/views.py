@@ -227,7 +227,7 @@ def author(request, pk):
 
 
 def list_vulnerable_apps(request, vuln_name):
-	vulnsFound = VulnerabilityResult.objects.filter(name=vuln_name)
+	vulnsFound = VulnerabilityResult.objects.filter(name=vuln_name).order_by('-id')
 	#context = {'last_packages':appsFound}
 	paginator = Paginator(vulnsFound, 20)
 	page = request.GET.get('page')
