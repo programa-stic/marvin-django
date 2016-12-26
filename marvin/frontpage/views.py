@@ -38,6 +38,7 @@ from django.template import RequestContext
 from djgpa.api import GooglePlay
 from .forms import UploadFileForm, SearchForm, CommentForm
 from packageinfo import process_package, vuln_analysis_retry
+import packagetree as pt
 from git_interface import borrar_repo
 from queue_handler import queue_for_dl
 import constants
@@ -145,6 +146,24 @@ def appsByPackage(request, pk):
 	except EmptyPage:
 		packages = paginator.page(paginator.num_pages)
 	context = {'packages': packages, 'package':myPackage}
+	#context.update(csrf(request))
+	return render_to_response('frontpage/apps_by_package.html', RequestContext(request, context))
+
+def appsByPackage2(request, pk, package_name):
+	#myApp = get_object_or_404 (App, pk=pkApp)
+	myPackages = Java_package.objects.filter(package_name__startswith = package_name)
+	object_list = []
+	for package in myPackages:
+		object_list.extend(package.app.all())
+	paginator = Paginator(object_list, 10)
+	page = request.GET.get('page')
+	try:
+		packages = paginator.page(page)
+	except PageNotAnInteger:
+		packages = paginator.page(1)
+	except EmptyPage:
+		packages = paginator.page(paginator.num_pages)
+	context = {'packages': packages, 'package':package_name}
 	#context.update(csrf(request))
 	return render_to_response('frontpage/apps_by_package.html', RequestContext(request, context))
 
@@ -550,7 +569,14 @@ def index(request):
 
 def app(request, app_id):
 	myApp = get_object_or_404 (App, pk=app_id)
-	return render(request, 'frontpage/app.html', {'app':myApp, 'severities':constants.SEVERITY_PRIORITIES})
+	packagetree = pt.getpackagetree(myApp.java_package_set.all())
+	justlevel2 = pt.get_level_2(packagetree)
+	return render(request, 
+		'frontpage/app.html', 
+		{'app':myApp, 
+		'severities':constants.SEVERITY_PRIORITIES, 
+		'ptree':justlevel2}
+		)
 
 def apk(request, app_id):
 	myApp = get_object_or_404 (App, pk=app_id)

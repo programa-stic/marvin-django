@@ -40,11 +40,11 @@ function toggle_vuln(vuln_id){
         <td>
         	{% if app.sourcesUploaded %}
             <form action="/frontpage/{{app.id}}/list_sources/" method="get">
-                <input type="submit" value="Git"/>
+                <input type="submit" target="_blank" value="Git"/>
             </form>
             {% else %}
             <form action="/frontpage/{{app.id}}/list_sources/" method="get">
-                <input type="submit" value="Git" disabled/>
+                <input type="submit" value="Git"  disabled/>
             </form>
             {% endif %}
         </td>
@@ -134,7 +134,7 @@ function toggle_vuln(vuln_id){
 <!-- 	{{receiver.name }} <br> -->
 	{% endfor %}	
 </ul>
-
+<!-- 
 <h3> Paquetes: {{app.java_package_set.all|length}} <button id="pkgs-btn" class="button">Toggle</button> </h3>
 <table class="packages">
 	<tr> <th> Nombre </th> <th> Link al repositorio</th></tr>
@@ -149,6 +149,21 @@ function toggle_vuln(vuln_id){
 		</tr>
 	{% endfor %}
 
+</table>
+ -->
+<h3> Paquetes2: {{ptree|length}} <button id="pkgs-btn" class="button">Toggle</button> </h3>
+<table class="packages">
+	<tr> <th> Nombre </th> <th> Link al repositorio</th></tr>
+	{% for package in ptree %}
+			<tr>
+				<td>
+					<a href="/frontpage/{{app.id}}/packagesByName/{{package}}/Aplicaciones/"> {{ package }} </a> 
+				</td>
+				<td>
+					<a href="/frontpage/{{app.id}}/packagesByName/{{package}}" target="_blank"> Link </a>
+				</td>
+			</tr>
+	{% endfor %}
 </table>
 
 <h3> Vulnerabilidades: {{app.vulnerabilityresult_set.all|length}} <button id="vulns-btn" class="button">Toggle</button> </h3>
