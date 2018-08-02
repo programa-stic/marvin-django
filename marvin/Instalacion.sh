@@ -4,16 +4,18 @@
 cd ~
 apt-get update
 #apt-get upgrade
-pip install django==1.7.11
-pip install django-googleplay-api # (ver configuracion que esta en ruso)
-sed -i "s/LANG = get_settings('LANG', \"ru_RU\")/LANG = get_settings('LANG', \"es_AR\")/" /usr/local/lib/python2.7/dist-packages/djgpa/configs.py 
-sed -i "s/COUNTRY = get_settings('COUNTRY', 'ru')/COUNTRY = get_settings('COUNTRY', 'ar')/" /usr/local/lib/python2.7/dist-packages/djgpa/configs.py 
+pip install django==1.11.5
+# pip install django-googleplay-api # (ver configuracion que esta en ruso)
+# sed -i "s/LANG = get_settings('LANG', \"ru_RU\")/LANG = get_settings('LANG', \"es_AR\")/" /usr/local/lib/python2.7/dist-packages/djgpa/configs.py 
+# sed -i "s/COUNTRY = get_settings('COUNTRY', 'ru')/COUNTRY = get_settings('COUNTRY', 'ar')/" /usr/local/lib/python2.7/dist-packages/djgpa/configs.py 
 
 pip install androguard
 pip install python-dateutil
+pip install pika
 apt-get -y install cmake
 apt-get -y install python-cffi
 apt-get -y install python-dev
+apt-get -y install rabbitmq-server
 
 # Instalación libgit2
 wget https://github.com/libgit2/libgit2/archive/v0.23.4.tar.gz

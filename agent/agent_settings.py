@@ -1,7 +1,7 @@
 import os
 import sys
 
-django_dir           = "/home/juanh/marvin-django/marvin/"
+django_dir           = "/home/fgimenez/marvin-django/marvin/"
 common_modules_dir   = django_dir+"frontpage/"
 settings_dir	     = django_dir+"marvin/"
 

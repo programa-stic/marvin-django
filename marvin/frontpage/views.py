@@ -29,13 +29,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 from frontpage.models import *
 # from django.template import RequestContext
 from django.views.generic import ListView, DetailView
-from django.core.context_processors import csrf
-from django.core.servers.basehttp import FileWrapper
+from django.template.context_processors import csrf
+from wsgiref.util import FileWrapper
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
-from djgpa.api import GooglePlay
+# from djgpa.api import GooglePlay
 from .forms import UploadFileForm, SearchForm, CommentForm
 from packageinfo import process_package, vuln_analysis_retry
 import packagetree as pt

@@ -22,12 +22,12 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from django.conf.urls import patterns, include, url
+from django.conf.urls import *
 
 from django.contrib import admin
 #admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = [
     # Examples:
     # url(r'^$', 'marvin.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
@@ -35,4 +35,4 @@ urlpatterns = patterns('',
     url(r'^$', include('frontpage.urls')),
     url(r'^frontpage/', include('frontpage.urls')),
     url(r'^admin/', include(admin.site.urls)),
-)
+]

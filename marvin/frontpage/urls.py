@@ -22,12 +22,12 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from django.conf.urls import patterns, url
+from django.conf.urls import *
 from frontpage.views import AppDetailView, VulnDetailView, PermsListView
 
 from frontpage import views
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$', views.index, name='index'),
 #    url(r'^ListaApps$', AppList.as_view()),
 #    url(r'^(?P<pk>\d+)/DetalleApp$', AppDetailView.as_view(),name = "appdetail"),
@@ -45,7 +45,7 @@ urlpatterns = patterns('',
     url(r'^(?P<pk>\d+)/packagesByName/(?P<package_name>[\w\._/$]+)/Aplicaciones/$', views.appsByPackage2),
     url(r'^(?P<pk>\d+)/packagesByName/(?P<package_name>[\w\._/$]+)/$', views.show_package_sources),
     url(r'^dynamic_vulns/$', views.list_dynamic_vulns),
-    url(r'^search_googleplay/$', views.search_googleplay),
+    # url(r'^search_googleplay/$', views.search_googleplay),
     url(r'^(?P<app_id>\d+)/$', views.app, name='app'),
     url(r'^(?P<app_id>\d+)/apk/$', views.apk, name='index'),
     url(r'^(?P<app_id>\d+)/src/$', views.src, name='index'),
@@ -67,4 +67,4 @@ urlpatterns = patterns('',
     url(r'^vuln/(?P<pk>\d+)/toggleDynTest$', views.toggleDynTest),
     url(r'^verified_vulns/$', views.list_verified_vulns),  
     url(r'^enabled_vulns/$', views.list_enabled_vulns),  
-)
+]
