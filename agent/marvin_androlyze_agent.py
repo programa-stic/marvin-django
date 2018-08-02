@@ -67,6 +67,7 @@ def callback(ch, method, properties, body):
   print "Dummy: " + repr(dummy)
   if dummy == False:  
     print "[x] Mensaje recibido, analizar %r" % (body,)
+    django_connection.close()
     appId = int(body)
     myApp = App.objects.get(pk=appId)
     package_name = myApp.package_name
