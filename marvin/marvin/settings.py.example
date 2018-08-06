@@ -22,16 +22,28 @@ SECRET_KEY = 'EDITME'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True # You will have to serve static files from outside Django if DEBUG=False
 
-TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
-TEMPLATE_DEBUG = True
-TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth",
-"django.core.context_processors.debug",
-"django.core.context_processors.i18n",
-"django.core.context_processors.media",
-"django.core.context_processors.static",
-"django.core.context_processors.tz",
-"django.contrib.messages.context_processors.messages")
-
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+            "frontpage/templates"
+        ],
+        'OPTIONS': {
+            'context_processors': [
+                # Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
+                # list if you haven't customized them:
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
 ALLOWED_HOSTS = ['*']
 
 # Application definition
@@ -44,7 +56,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bungiesearch',
-#    'djgpa',
     'preferences',
     'django.contrib.sites',
     'frontpage',
@@ -64,7 +75,7 @@ ROOT_URLCONF = 'marvin.urls'
 WSGI_APPLICATION = 'marvin.wsgi.application'
 
 BUNGIESEARCH = {
-               'URLS': ['172.30.0.5'], # No leading http:// or the elasticsearch client will complain.
+               'URLS': ['localhost'], # No leading http:// or the elasticsearch client will complain.
                'INDICES': {'apps2': 'frontpage.myindices'}, # Must be a module path.
                #'ALIASES': {'bsearch': 'marvin.search_aliases'},
                'SIGNALS': {'BUFFER_SIZE': 1},
@@ -78,9 +89,9 @@ DATABASES = {
     'default': {
          'ENGINE': 'django.db.backends.mysql',
          'NAME': 'marvin',
-         'USER': 'marvin',
-         'PASSWORD': 'pelucidar',
-         'HOST': '172.30.0.3',
+         'USER': 'database user',
+         'PASSWORD': 'database password,
+         'HOST': 'localhost',
 	 'PORT': '3306'
     }
 }
