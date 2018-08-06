@@ -11,6 +11,7 @@
 	<th>Status </th>
 	<th>Subida a Marvin </th>
 	<th>Último chequeo</th>
+    <th>Intentos</th>
 </tr>
 {% for vuln in vulns %}
  <tr> <td> <a href="/frontpage/{{vuln.id}}/DetalleVuln" />{{vuln.name}} </td> 
@@ -18,7 +19,8 @@
      <td> {{vuln.app.version}} </td>
      <td> {{vuln.dynamictestresults_set.first.status}}
      <td> {{vuln.app.uploaded}} </td>
-     <td> {{vuln.dynamictestresults_set.first.last_check}}     
+     <td> {{vuln.dynamictestresults_set.first.last_check}}  </td>
+     <td> {{vuln.dynamictestresults_set.first.count}}  </td>
  </tr>
 {% endfor %}
 </table>

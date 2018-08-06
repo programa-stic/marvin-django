@@ -15,7 +15,7 @@ from django.db import connections
 import frontpage.settings
 #import settings
 packages_dir         = frontpage.settings.root_apk_dir
-queue_host	     = "172.30.0.19"
+queue_host	     = "172.30.0.7"
 
 marvin_exchange_dl   = "marvin_xchg_dl"
 marvin_exchange_andr = "marvin_xchg_androlyze"

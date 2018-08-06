@@ -35,7 +35,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
-# from djgpa.api import GooglePlay
+
 from .forms import UploadFileForm, SearchForm, CommentForm
 from packageinfo import process_package, vuln_analysis_retry
 import packagetree as pt
@@ -50,7 +50,7 @@ import settings
 
 import apk_storage
 
-api = GooglePlay().auth()
+#api = GooglePlay().auth()
 
 # Create your views here.
 
@@ -212,7 +212,7 @@ def upload_file(request):
 				#return HttpResponseRedirect('/frontpage/')
 	else:
 		form = UploadFileForm()
-		myDict = {'form':form, 'title': "Subir archivo"}
+		myDict = {'form':form, 'title': "Subir archivo", 'user':request.user}
 		myDict.update(myToken)
 		return render_to_response('frontpage/upload.html', myDict)
 
@@ -276,7 +276,7 @@ def list_verified_vulns(request):
 	return render_to_response('frontpage/discovered_vulns.html', RequestContext(request, context))
 
 def list_enabled_vulns(request):
-	vulnsFound = VulnerabilityResult.objects.filter(scheduledForDT=True)
+	vulnsFound = VulnerabilityResult.objects.filter(scheduledForDT=True).order_by('-app__uploaded')
 	#context = {'last_packages':appsFound}
 	#appsFound = map(lambda vuln:vuln.app, vulnsFound)
 	paginator = Paginator(vulnsFound, 20)
@@ -389,11 +389,12 @@ def search_sourcefile(request):
 
 def show_activity(request, pk, activity_name):
 	myApp = App.objects.get(pk=pk)
+	myVersion = myApp.version.replace(' ','_')
 	if activity_name.endswith('.java'):
 		activity_name = activity_name[0:len(activity_name)-5]
 		classpath = activity_name.replace('.','/')
 		gitname = myApp.package_name.replace('.','-').lower()
-		url = settings.gitlab_url+'/marvin/'+gitname+'/tree/'+myApp.version+'/'+classpath+'.java'	
+		url = settings.gitlab_url+'/marvin/'+gitname+'/tree/'+myVersion+'/'+classpath+'.java'	
 		return HttpResponseRedirect(url)	
 	else:
 		try:
@@ -404,7 +405,7 @@ def show_activity(request, pk, activity_name):
 			print ("Fin busqueda de archivos\n")
 			if len(filesFound) > 0:
 				gitname = myApp.package_name.replace('.','-').lower()
-				url = settings.gitlab_url+'/marvin/'+gitname+'/tree/'+myApp.version+'/'+classpath+'.java'	
+				url = settings.gitlab_url+'/marvin/'+gitname+'/tree/'+myVersion+'/'+classpath+'.java'	
 				return HttpResponseRedirect(url)
 			else:
 				context = {"errmsg": "La clase "+ activity_name+" no se halla en el repositorio, puede suceder que haya .DEX suplementarios. "+ str(errmsg)}
@@ -426,7 +427,8 @@ def show_package_sources(request, pk, package_name):
 		classpath = package_name.replace('.','/')
 		#mySF = myApp.sourcefile_set.get(file_name=classpath)
 		gitname = myApp.package_name.replace('.','-').lower()
-		url = settings.gitlab_url+'/marvin/'+gitname+'/tree/'+myApp.version+'/'+classpath
+		myVersion = myApp.version.replace(' ','_')
+		url = settings.gitlab_url+'/marvin/'+gitname+'/tree/'+myVersion+'/'+classpath
 		return HttpResponseRedirect(url)
 	except Exception as errmsg:
 		context = {"errmsg": "La clase "+ package_name+" no se halla en el repositorio, puede suceder que haya .DEX suplementarios. "+ str(errmsg)}
@@ -543,7 +545,7 @@ def list_sourcefiles(request, pk):
 	#allObjs = App.objects.count()
 	myApp = get_object_or_404 (App, pk=pk)
 	sanitized_package_name = myApp.package_name.replace(".",'-').lower()
-	gitlab_url = settings.gitlab_url+'/marvin/'+sanitized_package_name+'/tree/'+myApp.version
+	gitlab_url = settings.gitlab_url+'/marvin/'+sanitized_package_name+'/tree/'+myApp.version.replace(' ','_')
 	return HttpResponseRedirect(gitlab_url)
 
 def source_file_contents(request,pk):

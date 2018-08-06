@@ -44,7 +44,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bungiesearch',
-    'djgpa',
+#    'djgpa',
     'preferences',
     'django.contrib.sites',
     'frontpage',
@@ -64,7 +64,7 @@ ROOT_URLCONF = 'marvin.urls'
 WSGI_APPLICATION = 'marvin.wsgi.application'
 
 BUNGIESEARCH = {
-               'URLS': ['localhost'], # No leading http:// or the elasticsearch client will complain.
+               'URLS': ['172.30.0.5'], # No leading http:// or the elasticsearch client will complain.
                'INDICES': {'apps2': 'frontpage.myindices'}, # Must be a module path.
                #'ALIASES': {'bsearch': 'marvin.search_aliases'},
                'SIGNALS': {'BUFFER_SIZE': 1},
@@ -79,8 +79,8 @@ DATABASES = {
          'ENGINE': 'django.db.backends.mysql',
          'NAME': 'marvin',
          'USER': 'marvin',
-         'PASSWORD': '********',
-         'HOST': 'localhost',
+         'PASSWORD': 'pelucidar',
+         'HOST': '172.30.0.3',
 	 'PORT': '3306'
     }
 }
