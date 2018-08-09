@@ -28,3 +28,33 @@ def list_vulns(request, vuln_list):
 	context = {'vulns':vulns}
 	# return render_to_response('frontpage/static_vulns.html', RequestContext(request, context))
 	return render(request, 'frontpage/static_vulns.html', context)
+
+def list_verified_vulns(request):
+	vulnsFound = VulnerabilityResult.objects.filter(dynamictestresults__status="SUCCESS").order_by('-dynamictestresults__last_check')
+	#context = {'last_packages':appsFound}
+	#appsFound = map(lambda vuln:vuln.app, vulnsFound)
+	paginator = Paginator(vulnsFound, 20)
+	page = request.GET.get('page')
+	try:
+		last_packages = paginator.page(page)
+	except PageNotAnInteger:
+		last_packages = paginator.page(1)
+	except EmptyPage:
+		last_packages = paginator.page(paginator.num_pages)
+	context = {'vulns':last_packages}
+	return render_to_response('frontpage/discovered_vulns.html', RequestContext(request, context))
+
+def list_enabled_vulns(request):
+	vulnsFound = VulnerabilityResult.objects.filter(scheduledForDT=True).order_by('-app__uploaded')
+	#context = {'last_packages':appsFound}
+	#appsFound = map(lambda vuln:vuln.app, vulnsFound)
+	paginator = Paginator(vulnsFound, 20)
+	page = request.GET.get('page')
+	try:
+		last_packages = paginator.page(page)
+	except PageNotAnInteger:
+		last_packages = paginator.page(1)
+	except EmptyPage:
+		last_packages = paginator.page(paginator.num_pages)
+	context = {'vulns':last_packages}
+	return render_to_response('frontpage/enabled_vulns.html', RequestContext(request, context))

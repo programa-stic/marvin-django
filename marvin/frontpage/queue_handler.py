@@ -12,7 +12,7 @@ from models import App, App_metadata
 
 out_connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host))
 out_channel = out_connection.channel()
-out_channel.exchange_declare(exchange=agent_settings.marvin_exchange_dl, type = "direct")
+out_channel.exchange_declare(exchange=agent_settings.marvin_exchange_dl, exchange_type = "direct")
 out_channel.queue_declare(agent_settings.download_queue, durable = True)
 out_channel.queue_bind(exchange    = agent_settings.marvin_exchange_dl,
 					   queue       = agent_settings.download_queue,

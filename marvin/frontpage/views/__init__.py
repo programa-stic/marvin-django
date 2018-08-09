@@ -21,3 +21,10 @@ from .srcView import *
 from .deleteView import *
 from .userLoginView import *
 from .userLogoutView import *
+from .showPackageSourcesView import *
+from .appsByPackage2View import *
+from .vulnDetailView import *
+from .commentsView import *
+from .appsByPackageView import *
+from .authorView import *
+from .toggleDynTestView import *

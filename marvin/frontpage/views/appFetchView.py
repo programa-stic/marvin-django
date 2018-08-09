@@ -14,3 +14,9 @@ def app_fetch(request, pk):
 		# 	return render_to_response('frontpage/error.html', RequestContext(request, context))
 	else:
 		return HttpResponseRedirect('/frontpage/error/')
+
+def app_fetch_queued(request, pk):
+	myToken = csrf(request)
+	details = api.details(pk)
+	queue_for_dl(pk, details)
+	return HttpResponseRedirect('/frontpage/')
