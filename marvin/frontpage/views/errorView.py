@@ -1,2 +1,2 @@
 def error(request):
-	return render_to_response('frontpage/error.html', RequestContext(request))
+	return render(request, 'frontpage/error.html', {})

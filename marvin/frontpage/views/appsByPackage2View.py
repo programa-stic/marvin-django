@@ -14,4 +14,4 @@ def appsByPackage2(request, pk, package_name):
 		packages = paginator.page(paginator.num_pages)
 	context = {'packages': packages, 'package':package_name}
 	#context.update(csrf(request))
-	return render_to_response('frontpage/apps_by_package.html', RequestContext(request, context))
+	return render(request, 'frontpage/apps_by_package.html', context)

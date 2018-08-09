@@ -42,7 +42,7 @@ def list_verified_vulns(request):
 	except EmptyPage:
 		last_packages = paginator.page(paginator.num_pages)
 	context = {'vulns':last_packages}
-	return render_to_response('frontpage/discovered_vulns.html', RequestContext(request, context))
+	return render(request, 'frontpage/discovered_vulns.html', context)
 
 def list_enabled_vulns(request):
 	vulnsFound = VulnerabilityResult.objects.filter(scheduledForDT=True).order_by('-app__uploaded')
@@ -57,4 +57,4 @@ def list_enabled_vulns(request):
 	except EmptyPage:
 		last_packages = paginator.page(paginator.num_pages)
 	context = {'vulns':last_packages}
-	return render_to_response('frontpage/enabled_vulns.html', RequestContext(request, context))
+	return render(request, 'frontpage/enabled_vulns.html', context)

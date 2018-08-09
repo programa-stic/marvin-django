@@ -11,4 +11,4 @@ def appsByPermission(request, pk):
 		packages = paginator.page(paginator.num_pages)
 	context = {'packages': packages, 'perm':myPerm}
 	#context.update(csrf(request))
-	return render_to_response('frontpage/apps_by_permission.html', RequestContext(request, context))
+	return render(request, 'frontpage/apps_by_permission.html', context)

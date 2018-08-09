@@ -25,4 +25,4 @@ def show_activity(request, pk, activity_name):
 				return render_to_response('frontpage/error.html', RequestContext(request, context))
 		except Exception as errmsg:
 			context = {"errmsg": "La clase "+ activity_name+" no se halla en el repositorio, puede suceder que haya .DEX suplementarios. "+ str(errmsg)}
-			return render_to_response('frontpage/error.html', RequestContext(request, context))
+			return render(request, 'frontpage/error.html', context)

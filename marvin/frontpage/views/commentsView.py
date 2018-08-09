@@ -12,11 +12,11 @@ def addComment(request,pk):
 									   app = myVuln.app)
 			new_comment.save()
 		context = {'object':myVuln, 'form':myForm}
-		return render_to_response('frontpage/vulnerabilityresult_detail.html', RequestContext(request, context))
+		return render(request, 'frontpage/vulnerabilityresult_detail.html', context)
 	else:
 		myForm = CommentForm()
 		context = {'object':myVuln, 'form':myForm}
-		return render_to_response('frontpage/vulnerabilityresult_detail.html', RequestContext(request, context))
+		return render(request, 'frontpage/vulnerabilityresult_detail.html', context)
 
 def deleteComment(request,pk):
 	myComment = get_object_or_404 (App_comments, pk=pk)
@@ -24,4 +24,4 @@ def deleteComment(request,pk):
 	myComment.delete()
 	myForm = CommentForm(request.POST)
 	context = {'object':myVuln, 'form':myForm}
-	return render_to_response('frontpage/vulnerabilityresult_detail.html', RequestContext(request, context))
+	return render(request, 'frontpage/vulnerabilityresult_detail.html', context)

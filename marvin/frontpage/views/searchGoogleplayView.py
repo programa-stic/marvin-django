@@ -18,7 +18,7 @@ def search_googleplay(request):
 			except EmptyPage:
 				last_packages = paginator.page(paginator.num_pages)
 			context = {'packages':last_packages}
-			return render_to_response('frontpage/gpresults.html', RequestContext(request, context))
+			return render(request, 'frontpage/gpresults.html', context)
 		else:
 			return HttpResponseRedirect('frontpage/search_source.html/',myDict)
 	else:
@@ -26,4 +26,4 @@ def search_googleplay(request):
 		form = SearchForm()
 		myDict = {'form':form, 'title':"Buscar en Google Play"}
 		myDict.update(myToken)
-		return render_to_response('frontpage/search_source.html/',myDict)
+		return render(request, 'frontpage/search_source.html/',myDict)

@@ -10,4 +10,4 @@ def author(request, pk):
 	except EmptyPage:
 		last_packages = paginator.page(paginator.num_pages)
 	context = {'last_packages':last_packages}
-	return render_to_response('frontpage/index2.html', RequestContext(request, context))
+	return render(request, 'frontpage/index2.html', context)

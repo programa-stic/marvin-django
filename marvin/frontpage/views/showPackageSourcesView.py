@@ -16,4 +16,4 @@ def show_package_sources(request, pk, package_name):
 		return HttpResponseRedirect(url)
 	except Exception as errmsg:
 		context = {"errmsg": "La clase "+ package_name+" no se halla en el repositorio, puede suceder que haya .DEX suplementarios. "+ str(errmsg)}
-		return render_to_response('frontpage/error.html', RequestContext(request, context))
+		return render(request, 'frontpage/error.html', context)
