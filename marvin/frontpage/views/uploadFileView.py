@@ -9,7 +9,6 @@ from frontpage.packageinfo import process_package, vuln_analysis_retry
 @login_required
 def upload_file(request):
 	myToken = csrf(request)
-
 	if request.method == 'POST':
 		form = UploadFileForm(request.POST, request.FILES)
 		if form.is_valid():

@@ -16,6 +16,8 @@ apt-get -y install cmake
 apt-get -y install python-cffi
 apt-get -y install python-dev
 apt-get -y install rabbitmq-server
+#apt-get -y install python-gitlab
+
 
 # Instalación libgit2
 wget https://github.com/libgit2/libgit2/archive/v0.23.4.tar.gz

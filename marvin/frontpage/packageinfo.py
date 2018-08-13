@@ -145,10 +145,15 @@ def data_for_storage(rawfile):
 		return (repr(poof), None)
 
 def process_package(myfile, app_md):
-	t = threading.Thread (target=process_package_worker, args=(myfile, app_md))
+	# t = threading.Thread (target=process_package_worker, args=(myfile, app_md))
 	#threads = list()
 	#threads.append(t)
-	t.start()
+	logging.info("Se dispara el thread de subida del apk")
+	
+	# t.start()
+	
+	process_package_worker (myfile, app_md)
+
 	return "Nothing to see yet, move along"
 
 def find_packages(myApp):
@@ -372,10 +377,6 @@ def update_fields_vr(app, vuln_report):
 									 	 dynamicTest = instance['dynamic_test'],
 									 	 dynamic_test_params = instance['dynamic_test_params'],
 									 	 app = app)
-			#if report.name in constants.STATIC_VULN_TYPES:
-			#	report.severity = constants.SEVERITY_PRIORITIES[constants.STATIC_VULN_TYPES[report.name]]
-			#if report.name in constants.DYNAMIC_VULN_TYPES:
-			#	report.severity = constants.SEVERITY_PRIORITIES[constants.DYNAMIC_VULN_TYPES[report.name]]
 			report.severity = instance['severity']
 			if 'reference_class' in instance:
 				report.vuln_class = instance['reference_class']

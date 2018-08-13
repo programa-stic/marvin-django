@@ -40,7 +40,7 @@ import logging
 
 
 #from django.templates.defaultfilters import slugify
-logging.basicConfig(filename="/tmp/marvin.info.log", level=logging.WARN)
+# logging.basicConfig(filename="/tmp/marvin.info.log", level=logging.WARN)
 #logger = logging.getLogger("git_interface")
 
 def repo_name(package_name):
