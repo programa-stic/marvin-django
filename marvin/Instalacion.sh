@@ -12,15 +12,16 @@ pip install django==1.11.5
 pip install androguard
 pip install python-dateutil
 pip install pika
+pip install python-gitlab
 apt-get -y install cmake
 apt-get -y install python-cffi
 apt-get -y install python-dev
 apt-get -y install rabbitmq-server
-#apt-get -y install python-gitlab
+
 
 
 # Instalación libgit2
-wget https://github.com/libgit2/libgit2/archive/v0.23.4.tar.gz
+wget https://github.com/libgit2/libgit2/archive/v0.27.0.tar.gz
 tar xvzf v0.23.4.tar.gz
 cd libgit2-0.23.4
 cmake .
@@ -31,7 +32,7 @@ cd ..
 rm -rf libgit2-0.23.4
 
 # Instalación pygit2
-wget https://github.com/libgit2/pygit2/archive/v0.23.2.tar.gz
+wget https://github.com/libgit2/pygit2/archive/v0.27.0.tar.gz
 tar xvzf v0.23.2.tar.gz
 cd pygit2-0.23.2
 python setup.py install
@@ -63,7 +64,6 @@ wget https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/
 dpkg -i elasticsearch-2.1.0.deb
 service elasticsearch start
 update-rc.d elasticsearch defaults 95 10
-pip install python-gitlab
 # El marvin-static-analyzer hay que bajarlo con un usuario raso
 # git clone https://jheguia@bitbucket.org/jrinaudo/marvin-static-analyzer.git
 

@@ -65,7 +65,8 @@ def crear_repo(package_name):
 	myRemote = repo.remotes.create(package_name, gitlab_url+'/marvin/'+dashed_package_name+'.git')
 	gl = Gitlab (gitlab_url, gitlab_token)
 	gl.auth()
-	p = gl.Project({'name': package_name, 'public':True})
+	# p = gl.Project({'name': package_name, 'public':True})
+	p = gl.projects.create({'name': package_name})
 	p.save()
 	return repo
 
@@ -131,7 +132,7 @@ def stage_apk(app, overrides):
 	myRepo.create_branch(version, myRepo.head.get_object())
 	myRemote = myRepo.remotes[0]
 	#myRemote.credentials = pygit2.UserPass("marvin",marvin_git_passwd)
-	credentials = pygit2.UserPass("marvin",marvin_git_passwd)
+	credentials = pygit2.UserPass("marvinSadosky",marvin_git_passwd)
 	callbacks=pygit2.RemoteCallbacks(credentials=credentials)
 	myRemote.push(["refs/heads/master"],callbacks=callbacks)
 	myRemote.push(["refs/heads/"+version],callbacks=callbacks)
