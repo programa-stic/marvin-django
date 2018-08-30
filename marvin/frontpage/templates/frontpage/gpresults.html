@@ -9,22 +9,28 @@
 		<th> Package name </th>
 		<th> Version </th>
 		<th> Author </th>
+        <th> Free   </th>
         <th> Upload date </th>
 		<th> Downloads </th>
 	</tr>
 
 	{% for app in packages %}
 	<tr>
-		<td><a href="/frontpage/GetDetails/{{app.docid}}"> {{app.title}} </a></td>
-		<td> {{app.docid}} </td>
-        {% if app.details.appDetails.versionString %}
-            <td>{{app.details.appDetails.versionString}} </td>
+		<td><a href="/frontpage/GetDetails/{{app.docId}}"> {{app.title}} </a></td>
+		<td> {{app.docId}} </td>
+        {% if app.versionString %}
+            <td>{{app.versionString}} </td>
         {% else %}
-            <td>{{app.details.appDetails.versionCode}} </td>
+            <td>{{app.versionCode}} </td>
         {% endif %}
-		<td>{{app.creator}} </td>
-        <td>{{app.details.appDetails.uploadDate}} </td>
-        <td>{{app.details.appDetails.numDownloads}} </td>
+		<td>{{app.author}} </td>
+        {% if app.offer.0.micros > 0 %}
+            <td> No </td>
+        {% else %}
+            <td> Yes </td>
+        {% endif %}
+        <td>{{app.uploadDate}} </td>
+        <td>{{app.numDownloads}} </td>
 	</tr>
 
 		{% endfor %}

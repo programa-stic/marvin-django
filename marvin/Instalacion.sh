@@ -4,35 +4,40 @@
 cd ~
 apt-get update
 #apt-get upgrade
-pip install django==1.7.11
-pip install django-googleplay-api # (ver configuracion que esta en ruso)
-sed -i "s/LANG = get_settings('LANG', \"ru_RU\")/LANG = get_settings('LANG', \"es_AR\")/" /usr/local/lib/python2.7/dist-packages/djgpa/configs.py 
-sed -i "s/COUNTRY = get_settings('COUNTRY', 'ru')/COUNTRY = get_settings('COUNTRY', 'ar')/" /usr/local/lib/python2.7/dist-packages/djgpa/configs.py 
+pip install django==1.11.5
+# pip install django-googleplay-api # (ver configuracion que esta en ruso)
+# sed -i "s/LANG = get_settings('LANG', \"ru_RU\")/LANG = get_settings('LANG', \"es_AR\")/" /usr/local/lib/python2.7/dist-packages/djgpa/configs.py 
+# sed -i "s/COUNTRY = get_settings('COUNTRY', 'ru')/COUNTRY = get_settings('COUNTRY', 'ar')/" /usr/local/lib/python2.7/dist-packages/djgpa/configs.py 
 
 pip install androguard
 pip install python-dateutil
+pip install pika
+pip install python-gitlab
 apt-get -y install cmake
 apt-get -y install python-cffi
 apt-get -y install python-dev
+apt-get -y install rabbitmq-server
+
+
 
 # Instalación libgit2
-wget https://github.com/libgit2/libgit2/archive/v0.23.4.tar.gz
-tar xvzf v0.23.4.tar.gz
-cd libgit2-0.23.4
+wget https://github.com/libgit2/libgit2/archive/v0.27.0.tar.gz
+tar xvzf v0.27.0.tar.gz
+cd libgit2-0.27.0
 cmake .
 make
 make install
 ldconfig
 cd ..
-rm -rf libgit2-0.23.4
+rm -rf libgit2-0.27.0
 
 # Instalación pygit2
-wget https://github.com/libgit2/pygit2/archive/v0.23.2.tar.gz
-tar xvzf v0.23.2.tar.gz
-cd pygit2-0.23.2
+wget https://github.com/libgit2/pygit2/archive/v0.27.0.tar.gz
+tar xvzf v0.27.0.tar.gz
+cd pygit2-0.27.20
 python setup.py install
 cd ..
-rm -rf pygit2-0.23.2
+rm -rf pygit2-0.27.0
 
 # Instalación mySQL
 apt-get -y install mysql-server
@@ -59,7 +64,6 @@ wget https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/
 dpkg -i elasticsearch-2.1.0.deb
 service elasticsearch start
 update-rc.d elasticsearch defaults 95 10
-pip install python-gitlab
 # El marvin-static-analyzer hay que bajarlo con un usuario raso
 # git clone https://jheguia@bitbucket.org/jrinaudo/marvin-static-analyzer.git
 

@@ -30,6 +30,7 @@ $(document).ready(function() {
 	$( ".receiver" ).toggle();
 	$( ".service" ).toggle();
 	$( ".provider" ).toggle();
+	$( ".packages" ).toggle();
 	$( ".vulnerabilities" ).toggle();
 
 
@@ -56,6 +57,11 @@ $(document).ready(function() {
 	$( "#provs-btn" ).click(function(event) {
 		$( ".provider" ).toggle(400);
 	})
+
+	$( "#pkgs-btn" ).click(function(event) {
+		$( ".packages" ).toggle(400);
+	})
+
 
 
 	

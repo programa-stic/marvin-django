@@ -40,7 +40,7 @@ import logging
 
 
 #from django.templates.defaultfilters import slugify
-logging.basicConfig(filename="/tmp/marvin.info.log", level=logging.WARN)
+# logging.basicConfig(filename="/tmp/marvin.info.log", level=logging.WARN)
 #logger = logging.getLogger("git_interface")
 
 def repo_name(package_name):
@@ -65,7 +65,7 @@ def crear_repo(package_name):
 	myRemote = repo.remotes.create(package_name, gitlab_url+'/marvin/'+dashed_package_name+'.git')
 	gl = Gitlab (gitlab_url, gitlab_token)
 	gl.auth()
-	p = gl.Project({'name': package_name, 'public':True})
+	p = gl.projects.create({'name': package_name})
 	p.save()
 	return repo
 
@@ -114,7 +114,8 @@ def stage_apk(app, overrides):
 		#myTreeGen.insert(sourcefile.file_name, contents, pygit2.GIT_FILEMODE_BLOB)
 	#myTree = myTreeGen.write()
 	myTree    = myIndex.write_tree()
-	version   = app.version
+	version   = app.version.replace(' ','_')
+	print "App version: " + version
 	author    = pygit2.Signature("Alice Author", "alice@authors.tld")
 	committer = pygit2.Signature("Alice Author", "alice@authors.tld")
 	if master == None:
@@ -130,7 +131,7 @@ def stage_apk(app, overrides):
 	myRepo.create_branch(version, myRepo.head.get_object())
 	myRemote = myRepo.remotes[0]
 	#myRemote.credentials = pygit2.UserPass("marvin",marvin_git_passwd)
-	credentials = pygit2.UserPass("marvin",marvin_git_passwd)
+	credentials = pygit2.UserPass("marvinSadosky",marvin_git_passwd)
 	callbacks=pygit2.RemoteCallbacks(credentials=credentials)
 	myRemote.push(["refs/heads/master"],callbacks=callbacks)
 	myRemote.push(["refs/heads/"+version],callbacks=callbacks)
@@ -142,11 +143,16 @@ def add_other_files(app, myRepo, myIndex, overrides):
 	file_name = get_filepath(app.package_name, app.md5)
 	zipfile = ZipFile (file_name, 'r')
 	for filename in zipfile.namelist():
+		if filename.endswith('/'):
+			continue
+		if (filename.find(".git/") > 0):
+			continue
 		if filename in overrides:
 			logging.info ("Storing "+ filename +" from overrides\n")
 			myBytes = overrides[filename]
 		else:
 			myBytes = zipfile.read(filename)
+			print "add_other_files: Storing "+filename+"from zip"
 			logging.info ("Storing "+filename+"from zip")
 		contents = myRepo.create_blob(myBytes)
 		myIndex.add(pygit2.IndexEntry(filename, contents, pygit2.GIT_FILEMODE_BLOB))

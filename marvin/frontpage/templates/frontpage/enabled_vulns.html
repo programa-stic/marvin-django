@@ -1,0 +1,45 @@
+{% extends "frontpage/base.html" %}
+
+
+{% block content %}
+{% if vulns %}
+<table>
+<tr>
+	<th>Nombre vuln </th>
+	<th>Nombre app</th>
+	<th>Versión </th>
+	<th>Status </th>
+	<th>Subida a Marvin </th>
+	<th>Último chequeo</th>
+    <th>Intentos</th>
+</tr>
+{% for vuln in vulns %}
+ <tr> <td> <a href="/frontpage/{{vuln.id}}/DetalleVuln" />{{vuln.name}} </td> 
+     <td> <a href="/frontpage/{{vuln.app.id}}"/>{{vuln.app.app_name}} </td>
+     <td> {{vuln.app.version}} </td>
+     <td> {{vuln.dynamictestresults_set.first.status}}
+     <td> {{vuln.app.uploaded}} </td>
+     <td> {{vuln.dynamictestresults_set.first.last_check}}  </td>
+     <td> {{vuln.dynamictestresults_set.first.count}}  </td>
+ </tr>
+{% endfor %}
+</table>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if vulns.has_previous %}
+            <a href="?page={{ vulns.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ vulns.number }} of {{ vulns.paginator.num_pages }}.
+        </span>
+
+        {% if vulns.has_next %}
+            <a href="?page={{ vulns.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+{% endif %}
+
+{% endblock %}

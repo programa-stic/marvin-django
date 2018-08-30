@@ -30,8 +30,8 @@
 	{% for file in sourcefiles %}
 	<tr>
 		{% if search_result %}
-			<td> <a href="/frontpage/{{file.app.id}}/classes/{{file.file_name}}"> {{file.file_name}} </a> </td>
 			<td><a href="/frontpage/{{file.app.id}}/"> {{file.app.app_name}} </a></td>
+			<td> <a href="/frontpage/{{file.app.id}}/classes/{{file.file_name}}"> {{file.file_name}} </a> </td>
 		{% endif %}
 		<td> {{file.file_contents|length}} </td>
 	</tr>
@@ -62,18 +62,35 @@
  -->
 
 <div class="pagination">
-    <span class="step-links">
-        {% if sourcefiles.has_previous %}
-            <a href="?page={{ sourcefiles.previous_page_number }}">previous</a>
-        {% endif %}
+	<table>
+		<tr>
+			<td>
+			    <span class="step-links">
+			        {% if sourcefiles.has_previous %}
+			            <form action="?page={{ sourcefiles.previous_page_number }}" method="post">
+			                {% csrf_token %}
+			                <input name="terms" type="hidden" value="{{terms}}" />
+			                <input type="submit" value="Prev"/>
+			            </form>
 
-        <span class="current">
-            Page {{ sourcefiles.number }} of {{ sourcefiles.paginator.num_pages }}.
-        </span>
-
-        {% if sourcefiles.has_next %}
-            <a href="?page={{ sourcefiles.next_page_number }}">next</a>
-        {% endif %}
+			           <!--  <a href="?page={{ sourcefiles.previous_page_number }}">previous</a> -->
+			        {% endif %}
+			    </td>
+			    <td>
+			        <span class="current">
+			            Page {{ sourcefiles.number }} of {{ sourcefiles.paginator.num_pages }}.
+			        </span>
+			    </td>
+			    <td>
+			        {% if sourcefiles.has_next %}
+			            <form action="?page={{ sourcefiles.next_page_number }}" method="post">
+			                {% csrf_token %}
+			                <input name="terms" type="hidden" value="{{terms}}" />
+			                <input type="submit" value="Next"/>
+			            </form>
+			    </td>
+			<!--             <a href="?page={{ sourcefiles.next_page_number }}">next</a> -->
+			        {% endif %}
     </span>
 </div>
 

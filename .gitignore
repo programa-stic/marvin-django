@@ -1,1 +1,4 @@
 *.pyc
+marvin/frontpage/settings.py
+marvin/marvin/settings.py
+agent/agent_settings.py

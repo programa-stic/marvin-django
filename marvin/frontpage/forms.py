@@ -30,3 +30,6 @@ class UploadFileForm(forms.Form):
 
 class SearchForm(forms.Form):
 	terms = forms.CharField(label = "Search terms", max_length=100)
+
+class CommentForm(forms.Form):
+	text = forms.CharField(label="Comentario")

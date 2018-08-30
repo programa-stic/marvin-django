@@ -145,12 +145,27 @@ def data_for_storage(rawfile):
 		return (repr(poof), None)
 
 def process_package(myfile, app_md):
-	t = threading.Thread (target=process_package_worker, args=(myfile, app_md))
+	# t = threading.Thread (target=process_package_worker, args=(myfile, app_md))
 	#threads = list()
 	#threads.append(t)
-	t.start()
+	logging.info("Se dispara el thread de subida del apk")
+	
+	# t.start()
+	
+	process_package_worker (myfile, app_md)
+
 	return "Nothing to see yet, move along"
 
+def find_packages(myApp):
+	myFileContents = map (lambda element :element.file_contents, myApp.sourcefile_set.all())
+	myPackageLines = map (lambda file:
+							filter (lambda text: 
+								text.startswith("package"), 
+								file.split(";")), 
+							myFileContents)
+	myPackageLines = filter (lambda list: len(list)>0, myPackageLines)
+	myPackages = set(map (lambda text: text[0].split(" ")[1], myPackageLines))
+	return myPackages
 
 @processify
 def process_package_worker(myfile, app_md):
@@ -276,6 +291,17 @@ def save_sources_worker(d, app, overrides):
 	gitlab_upload_app(app, overrides)
 	app.sourcesUploaded = True
 	app.save()
+	packages = find_packages(app)
+	for package in packages:
+		existing = len(Java_package.objects.filter(package_name=package))
+		if existing == 0:
+			newPackage = Java_package(package_name = package)
+			newPackage.save()
+			newPackage.app.add(app)
+			newPackage.save()
+		else:
+			myPackage = Java_package.objects.get(package_name=package)
+			myPackage.app.add(app)
 	logging.info ("Clases decompiladas")
 
 def bayes_analysis(app):
@@ -351,10 +377,6 @@ def update_fields_vr(app, vuln_report):
 									 	 dynamicTest = instance['dynamic_test'],
 									 	 dynamic_test_params = instance['dynamic_test_params'],
 									 	 app = app)
-			#if report.name in constants.STATIC_VULN_TYPES:
-			#	report.severity = constants.SEVERITY_PRIORITIES[constants.STATIC_VULN_TYPES[report.name]]
-			#if report.name in constants.DYNAMIC_VULN_TYPES:
-			#	report.severity = constants.SEVERITY_PRIORITIES[constants.DYNAMIC_VULN_TYPES[report.name]]
 			report.severity = instance['severity']
 			if 'reference_class' in instance:
 				report.vuln_class = instance['reference_class']
@@ -403,5 +425,75 @@ def get_app_name(a, d):
                                         app_name = res.get_string(package_name, resource_name)[1]
         return app_name
 
+def reset_errors():
+	myVulns = DynamicTestResults.objects.filter(status="ERROR")
+	for vuln in myVulns:
+		if vuln.count < 1000:
+			vuln.status = "UNKNOWN"
+			print "App: "+ vuln.vuln.app.app_name + ", vuln: "+vuln.vuln.name + ", count: "+ str(vuln.count)
+			vuln.save()
+
+def reset_error(vuln):
+	myVuln = VulnerabilityResult.objects.get(pk=vuln)
+	myDr   = myVuln.dynamictestresults_set.first()
+	if myDr.status == "ERROR":
+		myDr.status = "UNKNOWN"
+		myDr.description = ""
+		myDr.save()
+
 # 		classifier_report = classifier_interface_file.evaluate_apk(permissions, perms_list_file, model_file)
 # 		marvin_es.store_cr(package_name, classifier_report)
+
+##################### Functions for queue processing #############
+
+@processify
+def basic_analysis(rawfile, app):
+	logging.info ("Entrando a basic_analysis")
+	try:
+		logging.info ("Extrayendo APK")
+		(myPackage, d, dx) = AnalyzeAPK(rawfile, raw=True, decompiler="dad")
+		logging.info ("APK extraido")
+	except Exception as poof:
+		logging.error ("Exception reading APK: " + repr (poof))
+		return "Excepcion leyendo APK: " + repr (poof)
+	sources   = {}
+	# try:	
+	# 	map (lambda cd: sources.update({cd.get_name():cd.get_source()}), d.get_classes())
+	# 	print "APK decompilado"
+	# except Exception as poof:
+	# 	print "Exception decompiling APK: " + repr (poof)
+
+	if myPackage.is_valid_APK():
+		android_manifest  = myPackage.get_android_manifest_xml().toxml()
+		overrides = {"AndroidManifest.xml": android_manifest}
+		save_sources_worker(d, app, overrides)
+		permissions = myPackage.get_details_permissions()
+		add_permissions(permissions, app) 
+
+		activities = myPackage.get_activities()
+		for act_name in activities:
+			django_act = Activity (name = act_name, 
+								  app = app)
+			django_act.save()
+
+		services = myPackage.get_services()
+		for serv_name in services:
+			django_srv = Service (name = serv_name, 
+								  app = app)
+			django_srv.save()
+
+		providers = myPackage.get_providers()
+		for prov_name in providers:
+			django_prov = Provider (name = prov_name, 
+								  app = app)
+			django_prov.save()
+
+		receivers = myPackage.get_receivers()
+		for recv_name in receivers:
+			django_recv = Receiver (name = recv_name, 
+								  app = app)
+			django_recv.save()
+
+		logging.info ("Entrando a analisis bayesiano")
+		bayes_analysis(app)
+		logging.info ("Fin analisis bayesiano")

@@ -2,29 +2,40 @@
 
 
 {% block content %}
-<h1> {{details.docV2.title}} </h1>
+<h1> {{details.title}} </h1>
 <table>
-<tr> <td> Package name</td><td> {{details.docV2.docid}} </td>
-<tr> <td> Version </td><td> {{details.docV2.details.appDetails.versionString}} </td>
-<tr> <td> Author </td><td> {{details.docV2.creator}} </td>
-<tr> <td> Uploaded </td><td> {{details.docV2.details.appDetails.uploadDate}} </td>
+<tr> <td> Package name</td><td> {{details.docId}} </td>
+<tr> <td> Version </td><td> {{details.versionString}} </td>
+<tr> <td> Author </td><td> {{details.author}} </td>
+<tr> <td> Uploaded </td><td> {{details.uploadDate}} </td>
 </table>
 
 <h2> Descripcion </h2>
-{{details.docV2.descriptionHtml}}
+<body>{{details.description|safe}}</body>
+
 <!-- <h2> Análisis según permisos</h2>
 <table>
 <tr> <td>Malware:</td> <td>{{ app.bayesResult }}</td></tr>
 <tr> <td>Confianza en el resultado: </td> <td>{{ app.bayesConfidence }}</td></tr>
 </table> -->
 <h2> Permisos </h2>
-{% for permission in details.docV2.details.appDetails.permission %}
-	{{permission }} <br>
+{% for permission in details.permission %}
+	{{permission}} <br>
 	{% endfor %}
 
-<form action="/frontpage/Fetch/{{details.docV2.docid}}/" method="POST">
-{% csrf_token %}
+
+{% if present == False %}
+ {% if details.offer.0.micros == 0 %}
+  <form action="/frontpage/Fetch/{{details.docId}}/" method="POST">
+   {% csrf_token %}
       <input type="submit" value="Descargar de Play Store"/>
-</form>
+  </form>
+ {% else %}
+  <h2> Este paquete no es gratis </h2> 
+ {% endif %}
+{% else %}
+<h2> Esta versión del paquete ya está en la base </h2>
+<a href="/frontpage/{{app.id}}/"> {{app.app_name}} </a>
+{% endif %}
  
 {% endblock %}

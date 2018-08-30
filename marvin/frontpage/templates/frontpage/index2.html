@@ -8,9 +8,9 @@
 		<th> Nombre aplicación </th>
 		<th> Nombre paquete</th>
 		<th> Versión </th>
-		<th> Status </th>
-        <th> Malware </th>		
-		<th> Confianza </th>
+		<th> DL Status </th>
+        <th> DC Status </th>		
+		<th> SA Status </th>
 		<th> Vulns </th>
 		<th>  </th>
 	</tr>
@@ -20,10 +20,12 @@
 		<td><a href="/frontpage/{{app.id}}/"> {{app.app_name}} </a></td>
 		<td> {{app.package_name}} </td>
 		<td>{{app.version}} </td>
-		<td>{{app.status}} </td>
-        <td>{{app.bayesResult}} </td>
+		<td>{{app.DLstatus}} </td>
+        <td>{{app.DCstatus}} </td>
+        <td>{{app.SAstatus}} </td>
+ <!--        <td>{{app.bayesResult}} </td>
         <td>{{app.bayesConfidence}} </td>
-        <td>{{app.vulnerabilityresult_set.all.count}} </td>
+  -->       <td>{{app.vulnerabilityresult_set.all.count}} </td>
         
 <!--         
         <td> <a href="/frontpage/{{app.id}}/list_sources/"> Listar fuentes </a> </td>

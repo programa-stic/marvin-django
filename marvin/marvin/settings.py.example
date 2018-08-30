@@ -17,7 +17,7 @@ SITE_ID = 1
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'spr2)nr^(#e2u-lh-xh2dpm2n8$dvhia@tixf0kgx8t!)8_#ga'
+SECRET_KEY = 'EDITME'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True # You will have to serve static files from outside Django if DEBUG=False
@@ -89,8 +89,8 @@ DATABASES = {
     'default': {
          'ENGINE': 'django.db.backends.mysql',
          'NAME': 'marvin',
-         'USER': 'marvin',
-         'PASSWORD': 'marvinpass',
+         'USER': 'database user',
+         'PASSWORD': 'database password,
          'HOST': 'localhost',
 	 'PORT': '3306'
     }

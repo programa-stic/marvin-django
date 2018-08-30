@@ -7,37 +7,16 @@
 <br>
 <table>
 	<tr>
-		<th> App name </th>
+		<th> Aplicacion </th>
 		<th> Package name </th>
 		<th> Version </th>
-		<th> Status </th>		
-		<th> APK </th>
-		<th> Source </th>
-		<th> Delete </th>
 	</tr>
 
-	{% for app in packages %}
+	{% for vuln in packages %}
 	<tr>
-		<td><a href="/frontpage/{{app.id}}/"> {{app.app_name}} </a></td>
-		<td> {{app.package_name}} </td>
-		<td>{{app.version}} </td>
-		<td>{{app.status}} </td>
-        <td>
-            <form action="/frontpage/{{app.id}}/apk/" method="get">
-                <input type="submit" value="APK"/>
-            </form>
-        </td>
-        <td>
-            <form action="/frontpage/{{app.id}}/src/" method="get">
-                <input type="submit" value="Sources"/>
-            </form>
-        </td>
-        <td>
-            <form action="/frontpage/{{app.id}}/delete/" method="post">
-            	{% csrf_token %}
-                <input type="submit" value="Delete"/>
-            </form>
-        </td>
+		<td><a href="/frontpage/{{vuln.id}}/DetalleVuln/"> {{vuln.app.app_name}} </a></td>
+		<td><a href="/frontpage/{{vuln.app.id}}/">  {{vuln.app.package_name}}</a> </td>
+		<td>{{vuln.app.version}} </td>
 	</tr>
 
 		{% endfor %}

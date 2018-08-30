@@ -22,22 +22,28 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+from django.contrib.auth.models import User
 from django.db import models
 from bungiesearch.managers import BungiesearchManager
 # Create your models here.
 
 class App(models.Model):
 	QUEUED_STATUS = 'QUEUED'
-	DOWNLOADING = 'DOWNL'
-	DOWNLOADED  = 'DLED'
-	START_STAT  = 'STATBEG'
-	END_STAT    = 'STATEND'
-	START_VF    = 'STARTVF'
-	END_VF      = 'ENDVF'
+	DOWNLOADING = 'Started'
+	DOWNLOADED  = 'Complete'
+	N_A			= 'N/A'
+	START_STAT  = 'Started'
+	END_STAT    = 'Complete'
+	START_VF    = 'Started'
+	END_VF      = 'Complete'
 	
 	
 	# app_id = models.AutoField(db_index=True, blank=True)
-	status = models.CharField(default = "QUEUED", max_length=20)
+	status = models.CharField(default = QUEUED_STATUS, max_length=20)
+	DLstatus = models.CharField(default = QUEUED_STATUS, max_length=20)
+	DCstatus = models.CharField(default = N_A, max_length=20)
+	SAstatus = models.CharField(default = N_A, max_length=20)
+	DAstatus = models.CharField(default = N_A, max_length=20)
 	package_name = models.CharField(db_index=True, max_length=100)
 	app_name = models.CharField(blank = True, db_index=True, max_length=100)
 	version = models.CharField(blank = True, max_length=30)
@@ -85,7 +91,6 @@ class App_metadata(models.Model):
 	
 	class Meta:
 		app_label = 'frontpage'
-
 
 class Permission(models.Model):
 	name = models.CharField(max_length=100)
@@ -150,9 +155,11 @@ class Service(models.Model):
 class VulnerabilityResult(models.Model):
 	name        = models.CharField(max_length=150)
 	description = models.TextField()
+	details     = models.TextField(null=True, blank=True)
 	confidence  = models.CharField(max_length=10, null=True)
 	severity    = models.CharField(max_length=20, null=True)
 	dynamicTest = models.BooleanField(default=False)
+	scheduledForDT = models.BooleanField(default=False)
 	dynamic_test_params = models.TextField(null=True)
 	vuln_class  = models.CharField(max_length=300, null=True)
 	vuln_method = models.CharField(max_length=300, null=True)
@@ -172,6 +179,7 @@ class DynamicTestResults(models.Model):
 	count = models.IntegerField()
 	description = models.TextField()
 	vuln = models.ForeignKey(VulnerabilityResult)
+	last_check = models.DateField(blank=True, auto_now=True)
 	objects = BungiesearchManager()
 	#app = models.ForeignKey(App)
 
@@ -182,30 +190,52 @@ class DynamicTestResults(models.Model):
 		app_label = 'frontpage'
 
 
-
-class NoUpdatedField(models.Model):
-	package_name = models.CharField(max_length=150, db_index=True)
-
+class App_comments(models.Model):
+	author = models.ForeignKey(User)
+	app = models.ForeignKey(App)
+	vuln = models.ForeignKey(VulnerabilityResult, null=True)
+	contents = models.TextField()
 	objects = BungiesearchManager()
+	#app = models.ForeignKey(App)
 
+	def __unicode__(self):
+		return self.contents
+	
 	class Meta:
 		app_label = 'frontpage'
 
+class Java_package(models.Model):
+	package_name = models.CharField(max_length=300)
+	app = models.ManyToManyField(App)
+	#objects = BungiesearchManager()
+	#app = models.ForeignKey(App)
 
-class ManagedButEmpty(models.Model):
-	package_name = models.CharField(max_length=150, db_index=True)
+	def __unicode__(self):
+		return self.package_name
 
-	objects = BungiesearchManager()
+# class NoUpdatedField(models.Model):
+# 	package_name = models.CharField(max_length=150, db_index=True)
 
-	class Meta:
-		app_label = 'frontpage'
+# 	objects = BungiesearchManager()
 
-class Unmanaged(models.Model):
-	package_name = models.CharField(max_length=150, db_index=True)
+# 	class Meta:
+# 		app_label = 'frontpage'
 
-	objects = BungiesearchManager()
 
-	class Meta:
-		app_label = 'frontpage'
+# class ManagedButEmpty(models.Model):
+# 	package_name = models.CharField(max_length=150, db_index=True)
+
+# 	objects = BungiesearchManager()
+
+# 	class Meta:
+# 		app_label = 'frontpage'
+
+# class Unmanaged(models.Model):
+# 	package_name = models.CharField(max_length=150, db_index=True)
+
+# 	objects = BungiesearchManager()
+
+# 	class Meta:
+# 		app_label = 'frontpage'
 
 
