@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from gpApi import googleplay
 from gpApi import utils
 from django.template.context_processors import csrf
@@ -22,6 +23,19 @@ def search_googleplay(request):
 			searchterms = request.POST['terms']
 			appsFound = server.search(searchterms, 34, None)
 			appsFound.sort(key=lambda app: dirtybastard(app['numDownloads']), reverse=True)
+=======
+def search_googleplay(request):
+	api = GooglePlay().auth()
+	myToken = csrf(request)
+	if request.method == 'POST':
+		form = SearchForm(request.POST)
+		if form.is_valid():
+			searchterms = request.POST['terms']
+			appsFound = api.search(searchterms)
+			appsFound.sort(key=lambda app: dirtybastard(app.details.appDetails.numDownloads), reverse=True)
+			#appsDict = api.toDict(appsFound)
+			#appsFound.sort(key=lambda app: app.details.appDetails.numDownloads)
+>>>>>>> f1dccd4066e58ec1d92601f311269f4f5e00a478
 			paginator = Paginator(appsFound, 20)
 			page = request.GET.get('page')
 			try:

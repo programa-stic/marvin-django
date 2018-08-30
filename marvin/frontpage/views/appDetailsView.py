@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from gpApi import googleplay
 from django.shortcuts import render
 from frontpage.models import App
@@ -16,4 +17,10 @@ def app_details(request, pk):
 	else:
 		inBase = False
 		context = {'details':details, 'present': inBase}
+=======
+def app_details(request, pk):
+	api = GooglePlay().auth()
+	details = api.details(pk)
+	context = {'details':details}
+>>>>>>> f1dccd4066e58ec1d92601f311269f4f5e00a478
 	return render(request, 'frontpage/app_metadata.html', context)

@@ -22,8 +22,13 @@ apt-get -y install rabbitmq-server
 
 # Instalación libgit2
 wget https://github.com/libgit2/libgit2/archive/v0.27.0.tar.gz
+<<<<<<< HEAD
 tar xvzf v0.27.0.tar.gz
 cd libgit2-0.27.0
+=======
+tar xvzf v0.23.4.tar.gz
+cd libgit2-0.23.4
+>>>>>>> f1dccd4066e58ec1d92601f311269f4f5e00a478
 cmake .
 make
 make install
@@ -33,8 +38,13 @@ rm -rf libgit2-0.27.0
 
 # Instalación pygit2
 wget https://github.com/libgit2/pygit2/archive/v0.27.0.tar.gz
+<<<<<<< HEAD
 tar xvzf v0.27.0.tar.gz
 cd pygit2-0.27.20
+=======
+tar xvzf v0.23.2.tar.gz
+cd pygit2-0.23.2
+>>>>>>> f1dccd4066e58ec1d92601f311269f4f5e00a478
 python setup.py install
 cd ..
 rm -rf pygit2-0.27.0

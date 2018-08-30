@@ -25,8 +25,13 @@
 
 
 {% if present == False %}
+<<<<<<< HEAD
  {% if details.offer.0.micros == 0 %}
   <form action="/frontpage/Fetch/{{details.docId}}/" method="POST">
+=======
+ {% if details.docV2.offer.0.micros == 0 %}
+  <form action="/frontpage/Fetch/{{details.docV2.docid}}/" method="POST">
+>>>>>>> f1dccd4066e58ec1d92601f311269f4f5e00a478
    {% csrf_token %}
       <input type="submit" value="Descargar de Play Store"/>
   </form>

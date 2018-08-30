@@ -65,6 +65,10 @@ def crear_repo(package_name):
 	myRemote = repo.remotes.create(package_name, gitlab_url+'/marvin/'+dashed_package_name+'.git')
 	gl = Gitlab (gitlab_url, gitlab_token)
 	gl.auth()
+<<<<<<< HEAD
+=======
+	# p = gl.Project({'name': package_name, 'public':True})
+>>>>>>> f1dccd4066e58ec1d92601f311269f4f5e00a478
 	p = gl.projects.create({'name': package_name})
 	p.save()
 	return repo

@@ -23,14 +23,23 @@
         {% else %}
             <td>{{app.versionCode}} </td>
         {% endif %}
+<<<<<<< HEAD
 		<td>{{app.author}} </td>
+=======
+		<td>{{app.creator}} </td>
+>>>>>>> f1dccd4066e58ec1d92601f311269f4f5e00a478
         {% if app.offer.0.micros > 0 %}
             <td> No </td>
         {% else %}
             <td> Yes </td>
         {% endif %}
+<<<<<<< HEAD
         <td>{{app.uploadDate}} </td>
         <td>{{app.numDownloads}} </td>
+=======
+        <td>{{app.details.appDetails.uploadDate}} </td>
+        <td>{{app.details.appDetails.numDownloads}} </td>
+>>>>>>> f1dccd4066e58ec1d92601f311269f4f5e00a478
 	</tr>
 
 		{% endfor %}
