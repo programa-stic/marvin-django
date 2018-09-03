@@ -26,10 +26,6 @@ def list_vulns(request, vuln_list):
 	except EmptyPage:
 		vulns = paginator.page(paginator.num_pages)
 	context = {'vulns':vulns}
-<<<<<<< HEAD
-=======
-	# return render_to_response('frontpage/static_vulns.html', RequestContext(request, context))
->>>>>>> f1dccd4066e58ec1d92601f311269f4f5e00a478
 	return render(request, 'frontpage/static_vulns.html', context)
 
 def list_verified_vulns(request):

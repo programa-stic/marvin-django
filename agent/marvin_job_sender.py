@@ -33,7 +33,7 @@ elif fase == 6:
 
 out_connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host))
 out_channel = out_connection.channel()
-out_channel.exchange_declare(exchange=exchange, type = "direct")
+out_channel.exchange_declare(exchange=exchange, exchange_type = "direct")
 out_channel.queue_declare(queue, durable = True)
 out_channel.queue_bind(exchange=exchange,
 	                   queue=queue,

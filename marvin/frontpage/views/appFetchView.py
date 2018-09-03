@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from gpApi import googleplay
 from django.shortcuts import render
 from frontpage.models import App
@@ -22,24 +21,6 @@ def app_fetch(request, pk):
 		details = server.details(pk)
 		myApp = process_package(myFile, details)
 		return HttpResponseRedirect('/frontpage/')
-=======
-def app_fetch(request, pk):
-	myToken = csrf(request)
-	api = GooglePlay().auth()
-	myFile = tempfile.NamedTemporaryFile()
-	success = api.download(pk, myFile.name)
-	if success:
-		details = api.details(pk)
-		myApp = process_package(myFile, details)
-		return HttpResponseRedirect('/frontpage/')
-		# if isinstance(myApp, App):
-		# 	return HttpResponseRedirect('/frontpage/'+str(myApp.id)+'/')
-		# else:
-		# 	context = {"errmsg": myApp}
-		# 	return render_to_response('frontpage/error.html', RequestContext(request, context))
->>>>>>> f1dccd4066e58ec1d92601f311269f4f5e00a478
-	else:
-		return HttpResponseRedirect('/frontpage/error/')
 
 def app_fetch_queued(request, pk):
 	myToken = csrf(request)

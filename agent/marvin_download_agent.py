@@ -5,7 +5,7 @@ import agent_settings
 sys.path.insert(0, agent_settings.common_modules_dir)
 
 import settings
-from djgpa.api import GooglePlay
+from gpApi import googleplay
 import tempfile
 from frontpage.packageinfo import process_package
 from frontpage.models import App
@@ -27,7 +27,7 @@ else:
 
 in_connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host))
 in_channel = in_connection.channel()
-in_channel.exchange_declare(exchange=agent_settings.marvin_exchange_dl, type = "direct")
+in_channel.exchange_declare(exchange=agent_settings.marvin_exchange_dl, exchange_type = "direct")
 in_channel.queue_declare(agent_settings.download_queue, durable=True)
 in_channel.queue_bind(exchange = agent_settings.marvin_exchange_dl, 
 	                  queue = agent_settings.download_queue, 
@@ -43,7 +43,8 @@ in_channel.queue_bind(exchange = agent_settings.marvin_exchange_dl,
 
 def callback(ch, method, properties, body):
     if dummy == False:
-        api = GooglePlay().auth()
+        server = googleplay.GooglePlayAPI('es_AR', 'America/Buenos_Aires')
+        server.login('gpagent001.fsadosky@gmail.com', 'grok984sanfason', None, None)
         (package_name, version_string) = unmarshal_name_version(body)
         print "[x] Mensaje recibido, descargar %r" % (package_name)
         myApp = App.objects.filter(package_name=package_name, version=version_string)[0]
@@ -86,7 +87,7 @@ def callback(ch, method, properties, body):
                 #out_connection.connect()
             out_connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host, heartbeat_interval=10))
             out_channel = out_connection.channel()
-            out_channel.exchange_declare(exchange=agent_settings.marvin_exchange_andr, type = "direct")
+            out_channel.exchange_declare(exchange=agent_settings.marvin_exchange_andr, exchange_type = "direct")
             out_channel.queue_declare(agent_settings.androlyze_queue, durable = True)
             out_channel.queue_bind(exchange    = agent_settings.marvin_exchange_andr,
                                    queue       = agent_settings.androlyze_queue,
