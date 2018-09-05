@@ -51,17 +51,15 @@ def callback(ch, method, properties, body):
         myApp.DLstatus = App.DOWNLOADING
         myApp.save()
         print "[x] Not dummy, descargar %r" % (package_name)
-        # matches = api.search_app(package_name)
-        # print "[x] Encontre %r" % (matches)
-
-        # if len(matches) == 0:
-        #     print " [E] %r no coincide con ningún paquete de la Play Store" % (package_name,)
-        #     ch.basic_ack(delivery_tag = method.delivery_tag)
-        #     return
-        # else:
         print "[x] descargando %r" % (package_name)
         myFile = tempfile.NamedTemporaryFile(delete=False)
-        success = api.download(package_name, myFile.name)
+        fl = server.download(package_name)
+        import pdb; pdb.set_trace()
+        # with open(docid + '.apk', 'wb') as myFile:
+        for chunk in fl.get('file').get('data'):
+            myFile.write(chunk)
+        print('\nDownload successful\n')
+        success = True
         if success:
             print "[x] %r descargado " % (package_name)
             #details = api.details(body)

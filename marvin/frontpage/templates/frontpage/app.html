@@ -70,7 +70,7 @@ function toggle_vuln(vuln_id){
 
 {% if app.app_metadata_set.all %}
 <h2> Descripción </h2>
-{{ app.app_metadata_set.first.description}}
+{{ app.app_metadata_set.first.description|safe}}
 {% endif %}
 <h2> Análisis según permisos</h2>
 <table>
