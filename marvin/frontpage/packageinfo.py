@@ -395,7 +395,9 @@ def update_fields_vr(app, vuln_report):
 def add_permissions(permissions, app):
 	for perm_name in permissions.keys():
 		#print perm_name
-		res = Permission.objects.search.query('match', name = perm_name)
+		# res = Permission.objects.search.query('match', name = perm_name)
+		# qs = App.objects.filter(package_name = package_name, version = version)
+		res = Permission.objects.filter(name = perm_name)
 		if len(res)==0:
 			django_perm = Permission (name = perm_name, 
 									  perm_description = permissions[perm_name][1],

@@ -131,7 +131,7 @@ def stage_apk(app, overrides):
 	myRepo.create_branch(version, myRepo.head.get_object())
 	myRemote = myRepo.remotes[0]
 	#myRemote.credentials = pygit2.UserPass("marvin",marvin_git_passwd)
-	credentials = pygit2.UserPass("marvinSadosky",marvin_git_passwd)
+	credentials = pygit2.UserPass("Marvin",marvin_git_passwd)
 	callbacks=pygit2.RemoteCallbacks(credentials=credentials)
 	myRemote.push(["refs/heads/master"],callbacks=callbacks)
 	myRemote.push(["refs/heads/"+version],callbacks=callbacks)

@@ -56,7 +56,7 @@ class App(models.Model):
 	bayesConfidence = models.DecimalField(blank=True, null=True, max_digits=4, decimal_places=3)
 	sourcesUploaded = models.BooleanField(default=False, blank=True)
 
-	objects = BungiesearchManager()
+	# objects = BungiesearchManager()
 
 	def __unicode__(self):
 		return self.package_name + ' ' + self.version
@@ -69,7 +69,7 @@ class Sourcefile(models.Model):
 	file_contents = models.TextField()
 	app = models.ForeignKey(App)
 
-	objects = BungiesearchManager()
+	# objects = BungiesearchManager()
 
 	def __unicode__(self):
 		return self.file_name
@@ -84,7 +84,7 @@ class App_metadata(models.Model):
 	date_upload = models.CharField(blank = True, max_length=20)
 	description = models.TextField()
 	app = models.ForeignKey(App)
-	objects = BungiesearchManager()
+	# objects = BungiesearchManager()
 
 	def __unicode__(self):
 		return self.app_name
@@ -98,7 +98,7 @@ class Permission(models.Model):
 	perm_danger = models.TextField()
 	app = models.ManyToManyField(App)
 
-	objects = BungiesearchManager()
+	# objects = BungiesearchManager()
 
 	def __unicode__(self):
 		return self.name
@@ -110,7 +110,7 @@ class Permission(models.Model):
 class Activity(models.Model):
 	name = models.CharField(max_length=150)
 	app = models.ForeignKey(App)
-	objects = BungiesearchManager()
+	# objects = BungiesearchManager()
 
 	def __unicode__(self):
 		return self.name
@@ -121,7 +121,7 @@ class Activity(models.Model):
 class Receiver(models.Model):
 	name = models.CharField(max_length=150)
 	app = models.ForeignKey(App)
-	objects = BungiesearchManager()
+	# objects = BungiesearchManager()
 
 	def __unicode__(self):
 		return self.name
@@ -132,7 +132,7 @@ class Receiver(models.Model):
 class Provider(models.Model):
 	name = models.CharField(max_length=150)
 	app = models.ForeignKey(App)
-	objects = BungiesearchManager()
+	# objects = BungiesearchManager()
 
 	def __unicode__(self):
 		return self.name
@@ -144,7 +144,7 @@ class Service(models.Model):
 	name = models.CharField(max_length=150)
 	app = models.ForeignKey(App)
 
-	objects = BungiesearchManager()
+	# objects = BungiesearchManager()
 
 	def __unicode__(self):
 		return self.name
@@ -165,7 +165,7 @@ class VulnerabilityResult(models.Model):
 	vuln_method = models.CharField(max_length=300, null=True)
 	app         = models.ForeignKey(App, db_index = True)
 
-	objects = BungiesearchManager()
+	# objects = BungiesearchManager()
 
 	def __unicode__(self):
 		return self.name
@@ -180,7 +180,7 @@ class DynamicTestResults(models.Model):
 	description = models.TextField()
 	vuln = models.ForeignKey(VulnerabilityResult)
 	last_check = models.DateField(blank=True, auto_now=True)
-	objects = BungiesearchManager()
+	# objects = BungiesearchManager()
 	#app = models.ForeignKey(App)
 
 	def __unicode__(self):
@@ -195,7 +195,7 @@ class App_comments(models.Model):
 	app = models.ForeignKey(App)
 	vuln = models.ForeignKey(VulnerabilityResult, null=True)
 	contents = models.TextField()
-	objects = BungiesearchManager()
+	# objects = BungiesearchManager()
 	#app = models.ForeignKey(App)
 
 	def __unicode__(self):
