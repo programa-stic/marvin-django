@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from frontpage.models import App
+from frontpage.git_interface import borrar_repo
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 

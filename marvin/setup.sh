@@ -14,5 +14,3 @@ cd marvin-django/marvin
 python manage.py migrate
 echo "Django superuser creation:"
 python manage.py createsuperuser
-
-

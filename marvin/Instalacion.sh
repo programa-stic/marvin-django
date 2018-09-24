@@ -19,7 +19,6 @@ apt-get -y install python-dev
 apt-get -y install rabbitmq-server
 
 
-
 # Instalación libgit2
 wget https://github.com/libgit2/libgit2/archive/v0.27.0.tar.gz
 tar xvzf v0.27.0.tar.gz

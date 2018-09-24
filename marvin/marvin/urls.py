@@ -23,6 +23,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from django.conf.urls import *
+from frontpage.views import indexView
 
 from django.contrib import admin
 #admin.autodiscover()
@@ -34,5 +35,5 @@ urlpatterns = [
 
     url(r'^', include('frontpage.urls')),
     url(r'^frontpage/', include('frontpage.urls')),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls)
 ]
