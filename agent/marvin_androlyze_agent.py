@@ -17,7 +17,7 @@ import logging
 
 connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host))
 channel = connection.channel()
-channel.exchange_declare(exchange=agent_settings.marvin_exchange_andr, type = "direct")
+channel.exchange_declare(exchange=agent_settings.marvin_exchange_andr, exchange_type = "direct")
 channel.queue_declare(agent_settings.androlyze_queue, durable = True)
 channel.queue_bind(exchange = agent_settings.marvin_exchange_andr, 
                       queue = agent_settings.androlyze_queue, 
@@ -69,7 +69,9 @@ def callback(ch, method, properties, body):
     print "[x] Mensaje recibido, analizar %r" % (body,)
     django_connection.close()
     appId = int(body)
-    myApp = App.objects.get(pk=appId)
+    # myApp = App.objects.get(pk=appId)
+    import pdb; pdb.set_trace()
+    myApp = App.objects.filter(package_name=appId)[0]
     package_name = myApp.package_name
     md5 = myApp.md5
     try:

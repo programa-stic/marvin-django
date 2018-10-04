@@ -6,7 +6,8 @@ def app_details(request, pk):
 	server = googleplay.GooglePlayAPI('es_AR', 'America/Buenos_Aires')
 	server.login('gpagent001.fsadosky@gmail.com', 'grok984sanfason', None, None)
 	details = server.details(pk)
-	package_name = details['dependencies'][0]
+	import pdb; pdb.set_trace()
+	package_name = details['docId']
 	version = details['versionString']
 	present = App.objects.filter(package_name=package_name, version=version)
 	if len(present)>0:

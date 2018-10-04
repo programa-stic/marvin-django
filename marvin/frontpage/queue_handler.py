@@ -47,10 +47,45 @@ def queue_for_dl(package_name, app_md):
 	                  properties = pika.BasicProperties(delivery_mode = 2), 
 	                  mandatory = 1)
 
-#def queue_for_androlyze(app):
+def queue_for_androlyze(myfile, package_name, app_md):
 	
+	myApp = App(package_name = package_name,
+				app_name= app_md['title'],
+				version = app_md['versionString'],
+				DLstatus = App.DOWNLOADED)
+	myApp.save()
+	metadata = App_metadata(app_name= app_md['title'],
+						version_string = app_md['versionString'],
+						author = app_md['author'],
+						date_upload = app_md['uploadDate'],
+						description = app_md['description'],
+						app = myApp)
+	metadata.save()
 
-def marshal_name_version (package_name, version_string):
+	md5hash = md5(rawfile).digest().encode('hex')
+	sha1hash = sha1(rawfile).hexdigest()
+	rawfile = myfile.read()
+	filename = store_apk(rawfile, package_name, md5hash)
+	print "[x] %r almacenado en %r \n" % (package_name, filename)  
+	myApp.md5 = md5hash
+	myApp.sha1 = sha1hash
+	myApp.save()
+	connection.close()
+	ch.basic_ack(delivery_tag = method.delivery_tag)
+	out_connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host, heartbeat_interval=10))
+	out_channel = out_connection.channel()
+	out_channel.exchange_declare(exchange=agent_settings.marvin_exchange_andr, exchange_type = "direct")
+	out_channel.queue_declare(agent_settings.androlyze_queue, durable = True)
+	out_channel.queue_bind(exchange    = agent_settings.marvin_exchange_andr,
+	                   queue       = agent_settings.androlyze_queue,
+	                   routing_key = agent_settings.routing_key_andro)
+	out_channel.basic_publish(exchange = agent_settings.marvin_exchange_andr, 
+	                      routing_key = agent_settings.routing_key_andro,
+	                      body = (str(myApp.id)),
+	                      properties = pika.BasicProperties(delivery_mode = 2))
+
+
+def marshal_name_version(package_name, version_string):
 	myDict = {'package_name':package_name,
 			  'version_string': version_string}
 	return simplejson.dumps(myDict)

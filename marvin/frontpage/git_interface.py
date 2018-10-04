@@ -71,6 +71,7 @@ def crear_repo(package_name):
 
 def borrar_repo(package_name):
 	filepath = repo_name(package_name)
+	print 'Borrando proyecto ' + package_name
 	gl = Gitlab (gitlab_url, gitlab_token)
 	gl.auth()
 	# Project search no anda bien, da error si pongo el package_name entero

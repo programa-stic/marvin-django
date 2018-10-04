@@ -145,15 +145,13 @@ def data_for_storage(rawfile):
 		return (repr(poof), None)
 
 def process_package(myfile, app_md):
-	# t = threading.Thread (target=process_package_worker, args=(myfile, app_md))
-	#threads = list()
-	#threads.append(t)
+	t = threading.Thread (target=process_package_worker, args=(myfile, app_md))
+	threads = list()
+	threads.append(t)
 	logging.info("Se dispara el thread de subida del apk")
 	
-	# t.start()
+	t.start()
 	
-	process_package_worker (myfile, app_md)
-
 	return "Nothing to see yet, move along"
 
 def find_packages(myApp):
