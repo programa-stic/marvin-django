@@ -8,7 +8,12 @@ import simplejson
 
 sys.path.insert(0, settings.agent_dir)
 import agent_settings
+from androguard.misc import AnalyzeAPK
+from androlyze import APK
+import frontpage.apk_storage as apk_storage
+from frontpage.apk_storage import store_apk
 from models import App, App_metadata
+from hashlib import sha1, md5
 
 out_connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host))
 out_channel = out_connection.channel()
@@ -47,31 +52,33 @@ def queue_for_dl(package_name, app_md):
 	                  properties = pika.BasicProperties(delivery_mode = 2), 
 	                  mandatory = 1)
 
-def queue_for_androlyze(myfile, package_name, app_md):
-	
-	myApp = App(package_name = package_name,
-				app_name= app_md['title'],
-				version = app_md['versionString'],
+def queue_for_androlyze(myfile):
+	# (myPackage, d, dx) = AnalyzeAPK(rawfile, raw=True) Tarda demasiado tiempo.
+	apk = APK(myfile.name)
+	import pdb; pdb.set_trace()
+	myApp = App(package_name = apk.get_package(),
+				app_name= apk.get_app_name(),
+				version = apk.get_android_version_name(),
 				DLstatus = App.DOWNLOADED)
 	myApp.save()
-	metadata = App_metadata(app_name= app_md['title'],
-						version_string = app_md['versionString'],
-						author = app_md['author'],
-						date_upload = app_md['uploadDate'],
-						description = app_md['description'],
-						app = myApp)
-	metadata.save()
 
+	# metadata = App_metadata(app_name= app_md['title'],
+	# 					version_string = app_md['versionString'],
+	# 					author = app_md['author'],
+	# 					date_upload = app_md['uploadDate'],
+	# 					description = app_md['description'],
+	# 					app = myApp)
+
+	rawfile = myfile.read()
 	md5hash = md5(rawfile).digest().encode('hex')
 	sha1hash = sha1(rawfile).hexdigest()
-	rawfile = myfile.read()
+	
 	filename = store_apk(rawfile, package_name, md5hash)
 	print "[x] %r almacenado en %r \n" % (package_name, filename)  
 	myApp.md5 = md5hash
 	myApp.sha1 = sha1hash
 	myApp.save()
-	connection.close()
-	ch.basic_ack(delivery_tag = method.delivery_tag)
+
 	out_connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host, heartbeat_interval=10))
 	out_channel = out_connection.channel()
 	out_channel.exchange_declare(exchange=agent_settings.marvin_exchange_andr, exchange_type = "direct")

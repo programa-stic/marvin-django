@@ -16,11 +16,8 @@ def upload_file(request):
 		if form.is_valid():
 			print repr(request.FILES['file'])
 			# myApp = process_package(request.FILES['file'], None)
-			server = googleplay.GooglePlayAPI('es_AR', 'America/Buenos_Aires')
-			server.login('gpagent001.fsadosky@gmail.com', 'grok984sanfason', None, None)
-			import pdb; pdb.set_trace()
-			details = server.details(request.FILES['file'].name)
-			queue_for_androlyze(request.FILES['file'], pk, details)
+			queue_for_androlyze(request.FILES['file'])
+			myApp = []
 			if isinstance(myApp, App):
 				return HttpResponseRedirect('/frontpage/')
 				# return HttpResponseRedirect('/frontpage/'+str(myApp.id)+'/')

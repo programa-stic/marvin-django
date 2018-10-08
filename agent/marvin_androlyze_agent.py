@@ -70,7 +70,6 @@ def callback(ch, method, properties, body):
     django_connection.close()
     appId = int(body)
     # myApp = App.objects.get(pk=appId)
-    import pdb; pdb.set_trace()
     myApp = App.objects.filter(package_name=appId)[0]
     package_name = myApp.package_name
     md5 = myApp.md5
