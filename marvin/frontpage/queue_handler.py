@@ -53,12 +53,15 @@ def queue_for_dl(package_name, app_md):
 	                  mandatory = 1)
 
 def queue_for_androlyze(myfile):
-	# (myPackage, d, dx) = AnalyzeAPK(rawfile, raw=True) Tarda demasiado tiempo.
-	apk = APK(myfile.name)
-	import pdb; pdb.set_trace()
-	myApp = App(package_name = apk.get_package(),
+	rawfile = myfile.read()
+	apk = APK(myfile.temporary_file_path())
+	package_name = apk.get_package()
+	md5hash = md5(rawfile).digest().encode('hex')
+	sha1hash = sha1(rawfile).hexdigest()
+	
+	myApp = App(package_name = package_name,
 				app_name= apk.get_app_name(),
-				version = apk.get_android_version_name(),
+				version = apk.get_androidversion_code(),
 				DLstatus = App.DOWNLOADED)
 	myApp.save()
 
@@ -68,10 +71,6 @@ def queue_for_androlyze(myfile):
 	# 					date_upload = app_md['uploadDate'],
 	# 					description = app_md['description'],
 	# 					app = myApp)
-
-	rawfile = myfile.read()
-	md5hash = md5(rawfile).digest().encode('hex')
-	sha1hash = sha1(rawfile).hexdigest()
 	
 	filename = store_apk(rawfile, package_name, md5hash)
 	print "[x] %r almacenado en %r \n" % (package_name, filename)  

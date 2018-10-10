@@ -70,7 +70,7 @@ def callback(ch, method, properties, body):
     django_connection.close()
     appId = int(body)
     # myApp = App.objects.get(pk=appId)
-    myApp = App.objects.filter(package_name=appId)[0]
+    myApp = App.objects.get(pk=appId)
     package_name = myApp.package_name
     md5 = myApp.md5
     try:
@@ -113,7 +113,7 @@ def callback(ch, method, properties, body):
     #                           properties = pika.BasicProperties(delivery_mode = 2))
     out_connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host))
     out_channel = out_connection.channel()
-    out_channel.exchange_declare(exchange=agent_settings.marvin_exchange_pr, type = "direct")
+    out_channel.exchange_declare(exchange=agent_settings.marvin_exchange_pr, exchange_type = "direct")
     out_channel.queue_declare(agent_settings.process_queue_vuln,  durable = True)
     out_channel.queue_bind(exchange = agent_settings.marvin_exchange_pr, 
                            queue = agent_settings.process_queue_vuln, 

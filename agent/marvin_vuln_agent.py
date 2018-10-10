@@ -16,7 +16,7 @@ sys.path.insert(0, settings.vuln_analysis_dir)
 
 connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host))
 channel = connection.channel()
-channel.exchange_declare(exchange=agent_settings.marvin_exchange_pr, type = "direct")
+channel.exchange_declare(exchange=agent_settings.marvin_exchange_pr, exchange_type = "direct")
 channel.queue_declare(agent_settings.process_queue_vuln, durable = True)
 channel.queue_bind(exchange = agent_settings.marvin_exchange_pr, 
                       queue = agent_settings.process_queue_vuln, 

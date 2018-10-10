@@ -15,7 +15,6 @@ def upload_file(request):
 		form = UploadFileForm(request.POST, request.FILES)
 		if form.is_valid():
 			print repr(request.FILES['file'])
-			# myApp = process_package(request.FILES['file'], None)
 			queue_for_androlyze(request.FILES['file'])
 			myApp = []
 			if isinstance(myApp, App):
