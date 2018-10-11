@@ -35,8 +35,16 @@ channel.queue_bind(exchange = agent_settings.marvin_exchange_pr,
 #                        queue = agent_settings.process_queue_bayes, 
 #                        routing_key = agent_settings.routing_key_new_file)
 
+if sys.argv[1] == "dummy":
+    dummy = True
+else:
+    dummy = False
+
 
 def callback(ch, method, properties, body):
+    if dummy:
+        ch.basic_ack(delivery_tag = method.delivery_tag)
+        return
     print "[x] Mensaje recibido, buscar vulnerabilidades en %r" % (body,)
     django_connection.close()
     app_id = int(body)

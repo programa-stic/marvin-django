@@ -67,7 +67,7 @@ def callback(ch, method, properties, body):
   print "Dummy: " + repr(dummy)
   if dummy == False:  
     print "[x] Mensaje recibido, analizar %r" % (body,)
-    django_connection.close()
+    # django_connection.close()
     appId = int(body)
     # myApp = App.objects.get(pk=appId)
     myApp = App.objects.get(pk=appId)
@@ -95,7 +95,7 @@ def callback(ch, method, properties, body):
     myApp.DCstatus = "Complete"
     myApp.save()
     print "[x] %r procesado" % (body)
-    django_connection.close()
+    # django_connection.close()
     # if myApp == "El objeto ya existe en la base":
     #   ch.basic_ack(delivery_tag = method.delivery_tag)
     #   return

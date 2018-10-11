@@ -79,6 +79,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+FILE_UPLOAD_MAX_MEMORY_SIZE = 500
+
 ROOT_URLCONF = 'marvin.urls'
 
 WSGI_APPLICATION = 'marvin.wsgi.application'
