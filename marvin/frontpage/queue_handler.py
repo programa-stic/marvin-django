@@ -24,8 +24,13 @@ out_channel.queue_bind(exchange    = agent_settings.marvin_exchange_dl,
 					   routing_key = agent_settings.routing_key_dl)
 
 
-def queue_for_dl(package_name, app_md):
+def flush_queue():
+	out_channel.queue_purge(queue=agent_settings.download_queue)
+	out_channel.queue_purge(queue=agent_settings.androlyze_queue)
+	out_channel.queue_purge(queue=agent_settings.process_queue_vuln)
 
+def queue_for_dl(package_name, app_md):
+	
 	myApp = App(package_name = package_name,
 				app_name= app_md['title'],
 				version = app_md['versionString'],
@@ -78,17 +83,18 @@ def queue_for_androlyze(myfile):
 	myApp.sha1 = sha1hash
 	myApp.save()
 
-	out_connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host, heartbeat_interval=10))
-	out_channel = out_connection.channel()
-	out_channel.exchange_declare(exchange=agent_settings.marvin_exchange_andr, exchange_type = "direct")
-	out_channel.queue_declare(agent_settings.androlyze_queue, durable = True)
-	out_channel.queue_bind(exchange    = agent_settings.marvin_exchange_andr,
+	androlyze_out_connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host, heartbeat_interval=0))
+	androlyze_out_channel = androlyze_out_connection.channel()
+	androlyze_out_channel.exchange_declare(exchange=agent_settings.marvin_exchange_andr, exchange_type = "direct")
+	androlyze_out_channel.queue_declare(agent_settings.androlyze_queue, durable = True)
+	androlyze_out_channel.queue_bind(exchange    = agent_settings.marvin_exchange_andr,
 	                   queue       = agent_settings.androlyze_queue,
 	                   routing_key = agent_settings.routing_key_andro)
-	out_channel.basic_publish(exchange = agent_settings.marvin_exchange_andr, 
+	androlyze_out_channel.basic_publish(exchange = agent_settings.marvin_exchange_andr, 
 	                      routing_key = agent_settings.routing_key_andro,
 	                      body = (str(myApp.id)),
 	                      properties = pika.BasicProperties(delivery_mode = 2))
+	androlyze_out_connection.close()
 
 
 def marshal_name_version(package_name, version_string):

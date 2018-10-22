@@ -24,43 +24,10 @@ channel.queue_bind(exchange = agent_settings.marvin_exchange_andr,
                       routing_key = agent_settings.routing_key_andro)
 
 
-
-# out_connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host))
-# out_channel = out_connection.channel()
-# out_channel.exchange_declare(exchange=agent_settings.marvin_exchange_pr, type = "direct")
-# out_channel.queue_declare(agent_settings.process_queue_vuln,  durable = True)
-# out_channel.queue_bind(exchange = agent_settings.marvin_exchange_pr, 
-#                        queue = agent_settings.process_queue_vuln, 
-#                        routing_key = agent_settings.routing_key_vuln)
-
 if sys.argv[1] == "dummy":
     dummy = True
 else:
     dummy = False
-
-
-#out_channel.exchange_declare(exchange=agent_settings.marvin_exchange_pr, type = "direct")
-#out_channel.queue_declare(agent_settings.process_queue_bayes,  durable = True)
-#out_channel.queue_declare(agent_settings.process_queue_vuln,   durable = True)
-#out_channel.queue_declare(agent_settings.process_queue_monkey, durable = True)
-# out_channel.queue_bind(exchange = agent_settings.marvin_exchange_pr, 
-#                        queue = agent_settings.process_queue_bayes, 
-#                        routing_key = agent_settings.routing_key_bayes)
-# out_channel.queue_bind(exchange = agent_settings.marvin_exchange_pr, 
-#                        queue = agent_settings.process_queue_bayes, 
-#                        routing_key = agent_settings.routing_key_new_file)
-# out_channel.queue_bind(exchange = agent_settings.marvin_exchange_pr, 
-#                        queue = agent_settings.process_queue_vuln, 
-#                        routing_key = agent_settings.routing_key_vuln)
-# out_channel.queue_bind(exchange = agent_settings.marvin_exchange_pr, 
-#                        queue = agent_settings.process_queue_vuln, 
-#                        routing_key = agent_settings.routing_key_new_file)
-# out_channel.queue_bind(exchange = agent_settings.marvin_exchange_pr, 
-#                        queue = agent_settings.process_queue_monkey, 
-#                        routing_key = agent_settings.routing_key_monkey)
-# out_channel.queue_bind(exchange = agent_settings.marvin_exchange_pr, 
-#                       queue = agent_settings.process_queue_monkey, 
-#                       routing_key = agent_settings.routing_key_new_file)
 
 
 def callback(ch, method, properties, body):
@@ -95,7 +62,7 @@ def callback(ch, method, properties, body):
     myApp.DCstatus = "Complete"
     myApp.save()
     print "[x] %r procesado" % (body)
-    # django_connection.close()
+    
     # if myApp == "El objeto ya existe en la base":
     #   ch.basic_ack(delivery_tag = method.delivery_tag)
     #   return
@@ -118,13 +85,14 @@ def callback(ch, method, properties, body):
     out_channel.queue_bind(exchange = agent_settings.marvin_exchange_pr, 
                            queue = agent_settings.process_queue_vuln, 
                            routing_key = agent_settings.routing_key_vuln)
+    
     out_channel.basic_publish(exchange=agent_settings.marvin_exchange_pr,
                       routing_key = agent_settings.routing_key_vuln,
                       body = str(appId),
                       properties = pika.BasicProperties(delivery_mode = 2))
-
+    out_connection.close()
     ch.basic_ack(delivery_tag = method.delivery_tag)
-
+    
   else:
     ch.basic_ack(delivery_tag = method.delivery_tag)
     print "Package name: " + repr(body)

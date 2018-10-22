@@ -37,6 +37,7 @@ urlpatterns = [
     url(r'^search_malware/$', views.detected_as_malware),
     url(r'^search_googleplay/$', views.search_googleplay),
     url(r'^static_vulns/$', views.list_static_vulns),
+    url(r'^flush_queue/$', views.flush),
     url(r'^static_vulns/(?P<vuln_name>[\w\_]+)/Aplicaciones/$', views.list_vulnerable_apps),
     url(r'^(?P<pk>\d+)/classes/(?P<activity_name>[\w\._/$]+)/$', views.show_activity),
     url(r'^(?P<pk>\d+)/packages/(?P<package_name>[\w\._/$]+)/$', views.show_package_sources),

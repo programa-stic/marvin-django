@@ -16,15 +16,16 @@ def upload_file(request):
 		if form.is_valid():
 			print repr(request.FILES['file'])
 			queue_for_androlyze(request.FILES['file'])
-			myApp = []
-			if isinstance(myApp, App):
-				return HttpResponseRedirect('/frontpage/')
+			return HttpResponseRedirect('/frontpage/')
+			# myApp = []
+			# if isinstance(myApp, App):
+				# return HttpResponseRedirect('/frontpage/')
 				# return HttpResponseRedirect('/frontpage/'+str(myApp.id)+'/')
-			else:
-				context = {"errmsg": myApp}
-				return render(request, 'frontpage/error.html', context)
-				#process_package(form.fileField)
-				#return HttpResponseRedirect('/frontpage/')
+			# else:
+			# 	context = {"errmsg": myApp}
+			# 	return render(request, 'frontpage/error.html', context)
+			# 	#process_package(form.fileField)
+			# 	#return HttpResponseRedirect('/frontpage/')
 	else:
 		form = UploadFileForm()
 		myDict = {'form':form, 'title': "Subir archivo"}

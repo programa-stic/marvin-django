@@ -2,3 +2,6 @@
 marvin/frontpage/settings.py
 marvin/marvin/settings.py
 agent/agent_settings.py
+agent/androlyze.log
+agent/download.log
+agent/vuln.log

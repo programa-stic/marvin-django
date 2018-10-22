@@ -78,19 +78,14 @@ def borrar_repo(package_name):
 	# Si pido todos seria un delirio para la cantidad de proyectos que queremos manejar
 	# asi que buscamos por la ultima palabra del nombre (esperando que no sea Android) 
 	# e iteramos sobre los resultados hasta encontrar package_name
-	split_name = package_name.split('.')
+	# split_name = package_name.split('.')
+	# searchterm = split_name[len(split_name)-1]
 
-	searchterm = split_name[len(split_name)-1]
-	projlist = gl.search_projects(searchterm)
-	for project in projlist:
-		if project.name == package_name:
-			break
-	else:
-		project = None
-	if project == None:
+	projlist = gl.projects.list(search=package_name)
+	if projlist == []:
 		raise Exception("El proyecto no existe en GitLab")
 	else:
-		project.delete()
+		projlist[0].delete()
 	rmtree(filepath)
 
 
