@@ -1,3 +1,7 @@
+from django.shortcuts import render, get_object_or_404
+from django.core.paginator import Paginator, PageNotAnInteger
+from frontpage.models import Permission
+
 def appsByPermission(request, pk):
 	myPerm = get_object_or_404 (Permission, pk=pk)
 	object_list = myPerm.app.all()

@@ -1,4 +1,4 @@
-from gpApi import googleplay
+from frontpage.settings import gp_server, gp_authenticated
 from gpApi import utils
 from django.template.context_processors import csrf
 from django.http import HttpResponseRedirect
@@ -14,12 +14,11 @@ def dirtybastard(numDownloadsString):
 def search_googleplay(request):
 	myToken = csrf(request)
 	if request.method == 'POST':
-		server = googleplay.GooglePlayAPI('es_AR', 'America/Buenos_Aires')
-		server.login('gpagent001.fsadosky@gmail.com', 'grok984sanfason', None, None)
 		form = SearchForm(request.POST)
-		if form.is_valid():
+		import pdb;pdb.set_trace()
+		if form.is_valid() & gp_authenticated:
 			searchterms = request.POST['terms']
-			appsFound = server.search(searchterms, 34, None)
+			appsFound = gp_server.search(searchterms, 34, None)
 			appsFound.sort(key=lambda app: dirtybastard(app['numDownloads']), reverse=True)
 			paginator = Paginator(appsFound, 20)
 			page = request.GET.get('page')
@@ -29,10 +28,10 @@ def search_googleplay(request):
 				last_packages = paginator.page(1)
 			except EmptyPage:
 				last_packages = paginator.page(paginator.num_pages)
-			context = {'packages':last_packages}
+			context = {'packages':last_packages, 'terms':searchterms}
 			return render(request, 'frontpage/gpresults.html', context)
-		else:
-			return HttpResponseRedirect('frontpage/search_source.html/',myDict)
+		# else:
+			# return HttpResponseRedirect('frontpage/search_source.html/',myDict)
 	else:
 		myToken = csrf(request)
 		form = SearchForm()

@@ -40,7 +40,12 @@
 <div class="pagination">
     <span class="step-links">
         {% if packages.has_previous %}
-            <a href="/frontpage/gpresults.html?page={{ packages.previous_page_number }}">previous</a>
+            <!-- <a href="?page={{ packages.previous_page_number }}">previous</a> -->
+            <form action="?page={{ packages.previous_page_number }}" method="post">
+                {% csrf_token %}
+                <input name="terms" type="hidden" value="{{terms}}" />
+                <input type="submit" value="Previous"/>
+            </form>
         {% endif %}
 
         <span class="current">
@@ -48,7 +53,12 @@
         </span>
 
         {% if packages.has_next %}
-            <a href="/frontpage/gpresults.html?page={{ packages.next_page_number }}">next</a>
+            <!-- <a href="?page={{ packages.next_page_number }}">next</a> -->
+            <form action="?page={{ packages.next_page_number }}" method="post">
+                {% csrf_token %}
+                <input name="terms" type="hidden" value="{{terms}}" />
+                <input type="submit" value="Next"/>
+            </form>
         {% endif %}
     </span>
 </div>

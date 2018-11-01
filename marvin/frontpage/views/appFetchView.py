@@ -1,4 +1,4 @@
-from gpApi import googleplay
+from frontpage.settings import gp_server, gp_authenticated
 from django.shortcuts import render
 from frontpage.models import App
 from django.template.context_processors import csrf
@@ -8,9 +8,11 @@ import logging
 from frontpage.queue_handler import queue_for_dl
 
 def app_fetch_queued(request, pk):
-	myToken = csrf(request)
-	server = googleplay.GooglePlayAPI('es_AR', 'America/Buenos_Aires')
-	server.login('gpagent001.fsadosky@gmail.com', 'grok984sanfason', None, None)
-	details = server.details(pk)
-	queue_for_dl(pk, details)
-	return HttpResponseRedirect('/frontpage/')
+	if gp_authenticated:
+		myToken = csrf(request)
+		details = gp_server.details(pk)
+		queue_for_dl(pk, details)
+		return HttpResponseRedirect('/frontpage/')
+	else:
+		logging.info("Not logged in googleplay")
+		return render(request, 'frontpage/error.html', {})

@@ -10,6 +10,14 @@ gitlab_url = "<gitlab url>"
 gitlab_token = "<gitlab token>"
 marvin_git_passwd = "<gitlab password>"
 
+gp_server = googleplay.GooglePlayAPI('<language>', '<timezone>')
+gp_authenticated = False
+try:
+	gp_server.login('<googleplay user>', 'googleplay password', None, None)
+	gp_authenticated = True
+except Exception as e:
+      print "Error logeandose a googleplay %r: " + repr(foo)
+      
 
 
 

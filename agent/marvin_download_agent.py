@@ -54,7 +54,6 @@ def callback(ch, method, properties, body):
         print "[x] descargando %r" % (package_name)
         myFile = tempfile.NamedTemporaryFile(delete=False)
         fl = server.download(package_name)
-        import pdb; pdb.set_trace()
         # with open(docid + '.apk', 'wb') as myFile:
         for chunk in fl.get('file').get('data'):
             myFile.write(chunk)
@@ -75,14 +74,7 @@ def callback(ch, method, properties, body):
             myApp.save()
             connection.close()
             ch.basic_ack(delivery_tag = method.delivery_tag)
-            # try:
-            #     out_channel.basic_publish(exchange = agent_settings.marvin_exchange_andr, 
-            #                               routing_key = agent_settings.routing_key_andro,
-            #                               body = (str(myApp.id)),
-            #                               properties = pika.BasicProperties(delivery_mode = 2))
-            # except Exception as poof:
-            #     logging.error ("Exception publishing to androlyze_queue: " + repr (poof))
-                #out_connection.connect()
+
             out_connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host, heartbeat_interval=10))
             out_channel = out_connection.channel()
             out_channel.exchange_declare(exchange=agent_settings.marvin_exchange_andr, exchange_type = "direct")

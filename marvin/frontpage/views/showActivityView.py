@@ -19,7 +19,7 @@ def show_activity(request, pk, activity_name):
 			classpath = activity_name.replace('.','/')
 			#mySF = myApp.sourcefile_set.get(file_name=classpath)
 			print ("Empiezo a buscar archivos\n")
-			filesFound = Sourcefile.objects.filter(_all=classpath)
+			filesFound = Sourcefile.objects.filter(file_name=classpath)
 			print ("Fin busqueda de archivos\n")
 			if len(filesFound) > 0:
 				gitname = myApp.package_name.replace('.','-').lower()

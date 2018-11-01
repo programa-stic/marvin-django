@@ -13,7 +13,6 @@ from frontpage.models import App
 from django.db import connection as django_connection
 import pika
 import logging
-#import crawler
 
 connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host))
 channel = connection.channel()
@@ -32,7 +31,7 @@ else:
 
 def callback(ch, method, properties, body):
   print "Dummy: " + repr(dummy)
-  if dummy == False:  
+  if dummy == False:
     print "[x] Mensaje recibido, analizar %r" % (body,)
     # django_connection.close()
     appId = int(body)
@@ -62,22 +61,8 @@ def callback(ch, method, properties, body):
     myApp.DCstatus = "Complete"
     myApp.save()
     print "[x] %r procesado" % (body)
+    django_connection.close()
     
-    # if myApp == "El objeto ya existe en la base":
-    #   ch.basic_ack(delivery_tag = method.delivery_tag)
-    #   return
-
-    # exchange = agent_settings.marvin_exchange_dl
-    # queue = agent_settings.download_queue
-    # routing_key = agent_settings.routing_key_dl
-
-    # print "Obteniendo aplicaciones relacionadas con %r" % (myApp.package_name)
-    # next_files = crawler.get_related_app_names(myApp.package_name)
-    # for element in next_files:
-    #   out_channel.basic_publish(exchange = exchange, 
-    #                           routing_key = routing_key,
-    #                           body = element['package_name'],
-    #                           properties = pika.BasicProperties(delivery_mode = 2))
     out_connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host))
     out_channel = out_connection.channel()
     out_channel.exchange_declare(exchange=agent_settings.marvin_exchange_pr, exchange_type = "direct")
@@ -90,24 +75,10 @@ def callback(ch, method, properties, body):
                       routing_key = agent_settings.routing_key_vuln,
                       body = str(appId),
                       properties = pika.BasicProperties(delivery_mode = 2))
-    out_connection.close()
     ch.basic_ack(delivery_tag = method.delivery_tag)
-    
   else:
     ch.basic_ack(delivery_tag = method.delivery_tag)
     print "Package name: " + repr(body)
-    # next_files = crawler.get_related_app_names(body)
-    # for element in next_files:
-    #   print element['package_name']
-
-  
-    # out_channel.basic_publish(exchange = agent_settings.marvin_exchange_pr, 
-    #                           routing_key = agent_settings.routing_key_new_file,
-    #                           body = app_id,
-    #                           properties = pika.BasicProperties(delivery_mode = 2))
-
-
-
 
 channel.basic_consume(callback, queue = agent_settings.androlyze_queue)
 channel.start_consuming()
