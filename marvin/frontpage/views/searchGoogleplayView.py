@@ -7,19 +7,25 @@ from frontpage.forms import SearchForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import re
 
+appsFound = []
+appsRetrieved = False
+
 def dirtybastard(numDownloadsString):
 	# print numDownloadsString, (re.search(r'\d+', numDownloadsString.replace(',', '')).group())
 	return int(re.search(r'\d+', numDownloadsString.replace(',', '')).group())+10*len(numDownloadsString)
 
 def search_googleplay(request):
 	myToken = csrf(request)
+	global appsRetrieved
 	if request.method == 'POST':
 		form = SearchForm(request.POST)
-		import pdb;pdb.set_trace()
 		if form.is_valid() & gp_authenticated:
 			searchterms = request.POST['terms']
-			appsFound = gp_server.search(searchterms, 34, None)
-			appsFound.sort(key=lambda app: dirtybastard(app['numDownloads']), reverse=True)
+			if not appsRetrieved:				
+				global appsFound
+				appsFound = gp_server.search(searchterms, 100, None)
+				appsRetrieved = True
+				appsFound.sort(key=lambda app: dirtybastard(app['numDownloads']), reverse=True)
 			paginator = Paginator(appsFound, 20)
 			page = request.GET.get('page')
 			try:
@@ -37,4 +43,5 @@ def search_googleplay(request):
 		form = SearchForm()
 		myDict = {'form':form, 'title':"Buscar en Google Play"}
 		myDict.update(myToken)
+		appsRetrieved = False
 		return render(request, 'frontpage/search_source.html/',myDict)

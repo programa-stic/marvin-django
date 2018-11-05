@@ -22,10 +22,10 @@ def search_source(request):
 				last_files = paginator.page(1)
 			except EmptyPage:
 				last_files = paginator.page(paginator.num_pages)
-			context = {'sourcefiles':last_files, 'search_result': True}
+			context = {'sourcefiles':last_files, 'search_result': True, 'terms':searchterms}
 			return render(request, 'frontpage/sourcefile_list.html', context)
-		else:
-			return HttpResponseRedirect('frontpage/sourcefile_list.html',{})
+		# else:
+		# 	return HttpResponseRedirect('frontpage/sourcefile_list.html',{})
 	else:
 		myToken = csrf(request)
 		form = SearchForm()

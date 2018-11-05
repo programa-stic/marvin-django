@@ -37,32 +37,37 @@
 		{% endfor %}
 </table>
 
+<table>
 <div class="pagination">
     <span class="step-links">
-        {% if packages.has_previous %}
-            <!-- <a href="?page={{ packages.previous_page_number }}">previous</a> -->
-            <form action="?page={{ packages.previous_page_number }}" method="post">
-                {% csrf_token %}
-                <input name="terms" type="hidden" value="{{terms}}" />
-                <input type="submit" value="Previous"/>
-            </form>
-        {% endif %}
-
-        <span class="current">
-            Page {{ packages.number }} of {{ packages.paginator.num_pages }}.
-        </span>
-
-        {% if packages.has_next %}
-            <!-- <a href="?page={{ packages.next_page_number }}">next</a> -->
-            <form action="?page={{ packages.next_page_number }}" method="post">
-                {% csrf_token %}
-                <input name="terms" type="hidden" value="{{terms}}" />
-                <input type="submit" value="Next"/>
-            </form>
-        {% endif %}
+        <tr>
+            {% if packages.has_previous %}
+            <td>
+                <form action="?page={{ packages.previous_page_number }}" method="post">
+                    {% csrf_token %}
+                    <input name="terms" type="hidden" value="{{terms}}" />
+                    <input type="submit" value="Prev"/>
+                </form>
+            </td>
+            {% endif %}
+            <td>
+                <span class="current">
+                    Page {{ packages.number }} of {{ packages.paginator.num_pages }}.
+                </span>
+            </td>
+            {% if packages.has_next %}
+            <td>
+                <form action="?page={{ packages.next_page_number }}" method="post">
+                    {% csrf_token %}
+                    <input name="terms" type="hidden" value="{{terms}}" />
+                    <input type="submit" value="Next"/>
+                </form>
+            </td>
+            {% endif %}
+        </tr>
     </span>
 </div>
-
+</table>
 	
 {% else %}
 	<p> No apps available </p>
