@@ -14,6 +14,7 @@ import frontpage.apk_storage as apk_storage
 from frontpage.apk_storage import store_apk
 from models import App, App_metadata
 from hashlib import sha1, md5
+import logging
 
 out_connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host))
 
@@ -29,11 +30,14 @@ out_channel.queue_bind(exchange    = agent_settings.marvin_exchange_dl,
 					   routing_key = agent_settings.routing_key_dl)
 
 def flush_queue():
-	if out_channel.is_open:
-		out_channel.queue_purge(queue=agent_settings.download_queue)
-		out_channel.queue_purge(queue=agent_settings.androlyze_queue)
-		out_channel.queue_purge(queue=agent_settings.process_queue_vuln)
-
+	try:
+		if out_channel.is_open:
+			out_channel.queue_purge(queue=agent_settings.download_queue)
+			out_channel.queue_purge(queue=agent_settings.androlyze_queue)
+			out_channel.queue_purge(queue=agent_settings.process_queue_vuln)
+	except Exception as e:
+		logging.error("Error vaciando agentes: " + repr(e) + "\n")
+	
 def queue_for_dl(package_name, app_md):
 	
 	myApp = App(package_name = package_name,
