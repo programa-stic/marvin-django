@@ -1,3 +1,9 @@
+from django.shortcuts import render, get_object_or_404
+from django.core.paginator import Paginator, PageNotAnInteger
+from django.http import HttpResponse
+from frontpage.models import VulnerabilityResult, App_comments
+from frontpage.forms import CommentForm 
+
 def addComment(request,pk):
 	myVuln = get_object_or_404 (VulnerabilityResult, pk=pk)
 	if request.method == "POST":

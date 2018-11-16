@@ -59,7 +59,7 @@ urlpatterns = [
     url(r'^ListaPermisos$', PermsListView.as_view()),
     url(r'^Permisos/(?P<pk>\d+)/Aplicaciones/$', views.appsByPermission),
     url(r'^Packages/(?P<pk>\d+)/Aplicaciones/$', views.appsByPackage),
-    url(r'^Autor/(?P<pk>[\w\._ ]+)/$', views.author),
+    url(r'^Autor/(?P<pk>[\w\._\-% ]+)/$', views.author),
     url(r'^Codigo_fuente/(?P<pk>\d+)/$', views.source_file_contents),
     url(r'^vuln/(?P<pk>\d+)/toggleDynTest$', views.toggleDynTest),
     url(r'^verified_vulns/$', views.list_verified_vulns),  

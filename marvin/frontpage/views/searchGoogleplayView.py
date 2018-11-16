@@ -19,14 +19,15 @@ def search_googleplay(request):
 	global appsRetrieved
 	if request.method == 'POST':
 		form = SearchForm(request.POST)
-		if form.is_valid() & gp_authenticated:
+		if form.is_valid() and gp_authenticated:
 			searchterms = request.POST['terms']
 			if not appsRetrieved:				
 				global appsFound
-				appsFound = gp_server.search(searchterms, 100, None)
+				appsFound = gp_server.search(searchterms, 15, None)
 				appsRetrieved = True
+				# import pdb; pdb.set_trace()
 				appsFound.sort(key=lambda app: dirtybastard(app['numDownloads']), reverse=True)
-			paginator = Paginator(appsFound, 20)
+			paginator = Paginator(appsFound, 1000)
 			page = request.GET.get('page')
 			try:
 				last_packages = paginator.page(page)
@@ -36,8 +37,11 @@ def search_googleplay(request):
 				last_packages = paginator.page(paginator.num_pages)
 			context = {'packages':last_packages, 'terms':searchterms}
 			return render(request, 'frontpage/gpresults.html', context)
-		# else:
-			# return HttpResponseRedirect('frontpage/search_source.html/',myDict)
+		else:
+			reason = {}
+			if not gp_authenticated:
+				reason = {'errmsg':'No se puedo hacer el login a Google'}
+			return render(request, 'frontpage/error.html', reason)
 	else:
 		myToken = csrf(request)
 		form = SearchForm()

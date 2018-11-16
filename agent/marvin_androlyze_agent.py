@@ -14,7 +14,7 @@ from django.db import connection as django_connection
 import pika
 import logging
 
-connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host))
+connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host, heartbeat_interval=10000, blocked_connection_timeout=10000))
 channel = connection.channel()
 channel.exchange_declare(exchange=agent_settings.marvin_exchange_andr, exchange_type = "direct")
 channel.queue_declare(agent_settings.androlyze_queue, durable = True)

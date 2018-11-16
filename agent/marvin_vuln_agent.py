@@ -14,7 +14,7 @@ import pika
 sys.path.insert(0, settings.vuln_analysis_dir)
 #import analyzeme
 
-connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host))
+connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host, heartbeat_interval=10000, blocked_connection_timeout=10000))
 channel = connection.channel()
 channel.exchange_declare(exchange=agent_settings.marvin_exchange_pr, exchange_type = "direct")
 channel.queue_declare(agent_settings.process_queue_vuln, durable = True)

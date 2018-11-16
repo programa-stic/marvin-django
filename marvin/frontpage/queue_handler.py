@@ -18,7 +18,6 @@ import logging
 
 out_connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host))
 
-# out_connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host, heartbeat_interval=600,blocked_connection_timeout=300))
 out_channel = out_connection.channel()
 
 out_channel.exchange_declare(exchange=agent_settings.marvin_exchange_dl, exchange_type = "direct")
@@ -31,10 +30,24 @@ out_channel.queue_bind(exchange    = agent_settings.marvin_exchange_dl,
 
 def flush_queue():
 	try:
-		if out_channel.is_open:
-			out_channel.queue_purge(queue=agent_settings.download_queue)
-			out_channel.queue_purge(queue=agent_settings.androlyze_queue)
-			out_channel.queue_purge(queue=agent_settings.process_queue_vuln)
+		connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host))
+		ch = connection.channel()
+
+		response = ch.queue_purge(queue=agent_settings.download_queue)
+		# import pdb; pdb.set_trace()
+		if pika.spec.Queue.PurgeOk == type(response.method):
+			print "Se vaciaron ", response.method.message_count, " mensajes de " + agent_settings.download_queue
+
+		response = ch.queue_purge(queue=agent_settings.androlyze_queue)
+		if pika.spec.Queue.PurgeOk == type(response.method):
+			print "Se vaciaron ", response.method.message_count, " mensajes de " + agent_settings.androlyze_queue
+		
+		response = ch.queue_purge(queue=agent_settings.process_queue_vuln)
+		if pika.spec.Queue.PurgeOk == type(response.method):
+			print "Se vaciaron ", response.method.message_count, " mensajes de " + agent_settings.process_queue_vuln
+		
+		connection.close()
+
 	except Exception as e:
 		logging.error("Error vaciando agentes: " + repr(e) + "\n")
 	
@@ -98,9 +111,10 @@ def queue_for_androlyze(myfile):
 	myApp.sha1 = sha1hash
 	myApp.save()
 
-	out_connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host))
-	# out_connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host, heartbeat_interval=600,blocked_connection_timeout=300))
-	
+	params =  pika.ConnectionParameters(host=agent_settings.queue_host)
+
+	out_connection = pika.BlockingConnection(params)
+
 	out_channel = out_connection.channel()
 	
 	out_channel.exchange_declare(exchange=agent_settings.marvin_exchange_andr, exchange_type = "direct")
@@ -114,8 +128,9 @@ def queue_for_androlyze(myfile):
 	out_channel.basic_publish(exchange = agent_settings.marvin_exchange_andr, 
 	                      routing_key = agent_settings.routing_key_andro,
 	                      body = (str(myApp.id)),
-	                      properties = pika.BasicProperties(delivery_mode = 2),mandatory = 1)
-	out_connection.close()
+	                      properties = pika.BasicProperties(delivery_mode = 2),
+	                      mandatory = 1)
+	# out_connection.close()
 
 
 def marshal_name_version(package_name, version_string):
