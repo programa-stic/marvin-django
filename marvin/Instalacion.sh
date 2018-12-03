@@ -13,6 +13,8 @@ pip install androguard
 pip install python-dateutil
 pip install pika
 pip install python-gitlab
+pip install django-admin-tools
+
 apt-get -y install cmake
 apt-get -y install python-cffi
 apt-get -y install python-dev
