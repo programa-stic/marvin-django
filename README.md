@@ -68,6 +68,7 @@ Android-checkin: `https://github.com/nviennot/android-checkin`
 
 ### Dependencias ###
 	  Django 1.7
+	  pip
 	  apk-vulnerability-finder
 	  django-googleplay-api 
 	  androguard

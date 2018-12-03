@@ -35,5 +35,6 @@ urlpatterns = [
 
     url(r'^', include('frontpage.urls')),
     url(r'^frontpage/', include('frontpage.urls')),
-    url(r'^admin/', admin.site.urls)
+    url(r'^admin/', admin.site.urls),
+    url(r'^admin_tools/', include('admin_tools.urls'))
 ]
