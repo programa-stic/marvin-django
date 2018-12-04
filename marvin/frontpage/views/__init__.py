@@ -29,3 +29,4 @@ from .appsByPackageView import *
 from .authorView import *
 from .toggleDynTestView import *
 from .flushQueueView import *
+from .userCRUDView import *

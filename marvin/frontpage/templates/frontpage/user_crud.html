@@ -1,0 +1,32 @@
+{% extends "frontpage/base.html" %}
+
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'frontpage/style.css' %}" />
+{% block content %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Is anyone getting tired of repeatedly entering the header over and over?? -->
+        <title>Marvin</title>
+    </head>
+
+    {% if msg %}
+        <h2>{{msg}}</h2>
+    {% endif %}
+    <br/>
+
+    <body>
+        <h1>Agregar y Remover Usuarios</h1>
+
+        <form id="crud_form" method="post" action="/frontpage/user_crud/">
+            {% csrf_token %}
+            Username: <input type="text" name="username" value="" size="50" />
+            <br />
+            Password: <input type="password" name="password" value="" size="50" />
+            <br />
+            <input type="submit" value="Agregar usuario" />
+        </form>
+
+    </body>
+</html>
+{% endblock %} 

@@ -14,6 +14,7 @@ pip install python-dateutil
 pip install pika
 pip install python-gitlab
 pip install django-admin-tools
+pip install cryptography
 
 apt-get -y install cmake
 apt-get -y install python-cffi

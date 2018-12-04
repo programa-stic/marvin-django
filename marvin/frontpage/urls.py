@@ -56,6 +56,7 @@ urlpatterns = [
     url(r'^Fetch/(?P<pk>[\w\._]+)/$', views.app_fetch_queued), 
     url(r'^login/$', views.user_login, name='login'),
     url(r'^logout/$', views.user_logout, name='logout'),  
+    url(r'^user_crud/$', views.user_crud, name='crud'),  
     url(r'^ListaPermisos$', PermsListView.as_view()),
     url(r'^Permisos/(?P<pk>\d+)/Aplicaciones/$', views.appsByPermission),
     url(r'^Packages/(?P<pk>\d+)/Aplicaciones/$', views.appsByPackage),
