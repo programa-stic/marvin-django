@@ -15,6 +15,7 @@ pip install pika
 pip install python-gitlab
 pip install django-admin-tools
 pip install cryptography
+pip install protobuf
 
 apt-get -y install cmake
 apt-get -y install python-cffi
