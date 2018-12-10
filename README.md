@@ -25,7 +25,15 @@ El script `setup.sh` ejecuta las acciones necesarias para instalar Marvin en una
 	 root_git_dir = Directorio donde se almacenan los repositorios git locales. Debería existir. (esto puede ser un directorio externo a donde corre Marvin, montado por NFS)  
 	 gitlab_url = URL del Gitlab  
 	 gitlab_token = Token del usuario marvin para Gitlab  
-	 marvin_git_passwd = Contraseña del usuario marvin en Gitlab  
+	 marvin_git_passwd = Contraseña del usuario marvin en Gitlab
+
+	 gp_server = googleplay.GooglePlayAPI(	<language>,
+	 										<timezone>,
+	 										<device_id>)
+	 	languaje 	= Lenguaje de la cuenta de google ('it_IT', 'es_AR', etc)
+	 	timezone 	= Zona horaria del dispositivo
+	 	device_id 	= Nombre del dispositivo que se conecta. Todos los disponibles se pueden ver en /marvin/gpApi/device.properties
+  
   
 `marvin/settings.py` (lo que habría que editar)
 -----------------------------------------------
@@ -59,12 +67,7 @@ Marvin se inicia con el comando
 
 	$ python manage.py runserver 0.0.0.0:[port]
 
-en el directorio `marvin-django/marvin`. Una vez corriendo, queda configurar la cuenta de Google Play que va a ser usada por Marvin: 
-entrar con el navegador a la url `localhost:[port]/admin` e ingresar a la sección "Google Play". Ahí se deben ingresar los datos de una cuenta de Google que esté ligada a un teléfono Android: lo más conveniente es crear una cuenta y usar android-checkin para registrarla como ligada a un teléfono. 
-
-
-Android-checkin: `https://github.com/nviennot/android-checkin`
-
+en el directorio `marvin-django/marvin`.
 
 ### Dependencias ###
 	  Django 1.7

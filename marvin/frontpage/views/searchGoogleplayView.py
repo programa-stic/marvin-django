@@ -40,7 +40,7 @@ def search_googleplay(request):
 		else:
 			reason = {}
 			if not gp_authenticated:
-				reason = {'errmsg':'No se puedo hacer el login a Google'}
+				reason = {'errmsg':'No se pudo hacer login a Google Play'}
 			return render(request, 'frontpage/error.html', reason)
 	else:
 		myToken = csrf(request)
