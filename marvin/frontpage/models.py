@@ -24,7 +24,7 @@
 
 from django.contrib.auth.models import User
 from django.db import models
-from bungiesearch.managers import BungiesearchManager
+# from bungiesearch.managers import BungiesearchManager
 # Create your models here.
 
 class App(models.Model):

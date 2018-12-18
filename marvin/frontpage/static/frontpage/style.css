@@ -243,6 +243,10 @@ table {
     border-color: #ccc;
 }
 
+table.dataTable thead {
+    color:blue !important;
+}
+
 td, th {
     font-size: 16px;
     line-height: 20px;
@@ -253,16 +257,13 @@ td, th {
 }
 
 tr.odd{
-    background-color: #ceddef !important;
+    background-color: #c6e377 !important;
 }
 
-tr.odd a{
+/*tr.odd a{
     color: black;
 }
-
-td.numberCell {
-    text-align: center;
-}
+*/
 
 th {
     text-align: left;
