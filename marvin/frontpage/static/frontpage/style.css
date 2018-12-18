@@ -244,17 +244,29 @@ table {
 }
 
 td, th {
-    font-size: 11px;
-    line-height: 13px;
+    font-size: 16px;
+    line-height: 20px;
     border-bottom: 1px solid #eee;
     vertical-align: top;
     padding: 5px;
     font-family: "Lucida Grande", Verdana, Arial, sans-serif;
 }
 
+tr.odd{
+    background-color: #ceddef !important;
+}
+
+tr.odd a{
+    color: black;
+}
+
+td.numberCell {
+    text-align: center;
+}
+
 th {
     text-align: left;
-    font-size: 12px;
+    font-size: 16px;
     font-weight: bold;
 }
 

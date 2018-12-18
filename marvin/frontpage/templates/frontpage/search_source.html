@@ -1,15 +1,14 @@
 {% extends "frontpage/base.html" %}
 
-{% block form %}
+{% block content %}
 <!-- {% load staticfiles %}
 <link rel="stylesheet" type="text/css" href="{% static 'frontpage/style.css' %}" />
  -->
- <h2> {{ title }} </h2>
-<form enctype="multipart/form-data" method="post"  >
-{% csrf_token %}
-
-	{{form}}
-	<input type="submit" value="Search" action="/search_source/"/>
-</form>
+	 <h2> {{ title }} </h2>
+	<form enctype="multipart/form-data" method="post"  >
+		{% csrf_token %}
+		{{form}}
+		<input type="submit" value="Search" action="/search_source/"/>
+	</form>
 	
 {% endblock %}

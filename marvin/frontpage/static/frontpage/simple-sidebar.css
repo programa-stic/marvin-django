@@ -28,7 +28,7 @@ body {
   height: 100%;
   margin-left: -250px;
   overflow-y: auto;
-  background: #000;
+  background: #fff3e6;
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
@@ -65,18 +65,20 @@ body {
 .sidebar-nav li {
   text-indent: 20px;
   line-height: 40px;
+  font-size: 16;
 }
 
 .sidebar-nav li a {
   display: block;
   text-decoration: none;
-  color: #999999;
+  color: #000;
+  font-size: 16;
 }
 
 .sidebar-nav li a:hover {
   text-decoration: none;
   color: #fff;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .sidebar-nav li a:active, .sidebar-nav li a:focus {

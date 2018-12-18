@@ -11,7 +11,6 @@ appsFound = []
 appsRetrieved = False
 
 def dirtybastard(numDownloadsString):
-	# print numDownloadsString, (re.search(r'\d+', numDownloadsString.replace(',', '')).group())
 	return int(re.search(r'\d+', numDownloadsString.replace(',', '')).group())+10*len(numDownloadsString)
 
 def search_googleplay(request):
@@ -25,7 +24,6 @@ def search_googleplay(request):
 				global appsFound
 				appsFound = gp_server.search(searchterms, 15, None)
 				appsRetrieved = True
-				# import pdb; pdb.set_trace()
 				appsFound.sort(key=lambda app: dirtybastard(app['numDownloads']), reverse=True)
 			paginator = Paginator(appsFound, 1000)
 			page = request.GET.get('page')

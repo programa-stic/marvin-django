@@ -1,6 +1,8 @@
 {% load staticfiles %}
 
 <script src="{% static 'frontpage/js/jquery-1.12.1.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 <script src="{% static 'frontpage/js/myfuncs-jquery.js' %}"></script>
 
 
@@ -20,15 +22,15 @@
 </head>
 
 <body>
-    <div id="wrapper">
+    <div id="wrapper" class="toggled">
 
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
                 {% if user.is_authenticated %}
-                <li>Welcome, {{ user.username }}.</li>
-            {% else %}
-                <li>Welcome, new user.<br>Please <a href="/frontpage/login/"> log in.</a></li>
+                    <li><b>Bienvenido</b>, {{ user.username }}.</li>
+                {% else %}
+                    <li><a href="/frontpage/login/">Log in.</a></li>
             {% endif %}
             <li><a href="/frontpage/">Home</a></li>
             <li><a href="/user_crud/">Administrar Usuarios</a></li>
@@ -42,7 +44,7 @@
             <li><a href="/frontpage/dynamic_vulns/">Vulnerabilidades (d)</a>
             <li><a href="/frontpage/verified_vulns/">Vuln. verificadas</a>
             <li><a href="/frontpage/enabled_vulns/">Vuln. en chequeo</a>
-            <li><a href="/frontpage/logout/">Logout</a></li>
+            {% if user.is_authenticated %}<li><a href="/frontpage/logout/">Logout</a></li> {% endif %}
             </ul>
         </div>
         <!-- /#sidebar-wrapper -->
@@ -50,61 +52,25 @@
         <!-- Page Content -->
         <div id="page-content-wrapper">
             <div class="container-fluid">
-                <h1>Simple Sidebar</h1>
-                <p>This template has a responsive menu toggling system. The menu will appear collapsed on smaller screens, and will appear non-collapsed on larger screens. When toggled using the button below, the menu will appear/disappear. On small screens, the page content will be pushed off canvas.</p>
-                <p>Make sure to keep all page content within the <code>#page-content-wrapper</code>.</p>
-                <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">Toggle Menu</a>
+                <td>
+                {% block content %}{% endblock %}
+                </td>
+                </tr>
+                <!-- <a href="#menu-toggle" class="btn" id="menu-toggle">Opciones</a> -->
             </div>
         </div>
         <!-- /#page-content-wrapper -->
 
     </div>
     <!-- /#wrapper -->
-    <table>
-    {# <div id="sidebar" class="float-left" width="100px" > #}
-        {% block sidebar %}
-        <tr>
-            <td>
-                <ul>
-                    {% if user.is_authenticated %}
-                        <li>Welcome, {{ user.username }}.</li>
-                    {% else %}
-                        <li>Welcome, new user.<br>Please <a href="/frontpage/login/"> log in.</a></li>
-                    {% endif %}
-                    <li><a href="/frontpage/">Home</a></li>
-                    <li><a href="/user_crud/">Administrar Usuarios</a></li>
-                    <li><a href="/frontpage/upload/">Subir archivo</a></li>
-                    <li><a href="/frontpage/search_googleplay/">Buscar app en Google Play</a> 
-                    <li><a href="/frontpage/search_app/">Buscar app en Marvin</a>
-                    <li><a href="/frontpage/flush_queue/">Resetear agentes</a>
-                    <li><a href="/frontpage/search_source/">Buscar en código</a> 
-                    <li><a href="/frontpage/search_malware/">Malware (heurística)</a>                         
-                    <li><a href="/frontpage/ListaPermisos">Permisos</a></li>
-                    <li><a href="/frontpage/static_vulns/">Vulnerabilidades (s)</a>                         
-                    <li><a href="/frontpage/dynamic_vulns/">Vulnerabilidades (d)</a>                         
-                    <li><a href="/frontpage/verified_vulns/">Vuln. verificadas</a>                         
-                    <li><a href="/frontpage/enabled_vulns/">Vuln. en chequeo</a>                         
-                    <li><a href="/frontpage/logout/">Logout</a></li>
-                </ul>
-        {% endblock %}
-            </td>
-
     {# </div> #}
-
-    {# <div id="content" class="float-right" > #}
-            <td>
-                {% block content %}{% endblock %}
-            </td>
-        </tr>
-    </table>
-    {# </div> #}
-    {% block form %}{% endblock %}
-    <script>
+    <!-- {% block form %}{% endblock %} -->
+<!--     <script>
         $("#menu-toggle").click(function(e) {
             e.preventDefault();
             $("#wrapper").toggleClass("toggled");
         });
-    </script>
+    </script> -->
 
 </body>
 </html>
