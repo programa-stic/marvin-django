@@ -3,14 +3,18 @@
 {% load staticfiles %}
 <link rel="stylesheet" type="text/css" href="{% static 'frontpage/style.css' %}" />
 {% block content %}
-   <h2>Agregar y Remover Usuarios</h2>
+    <h3> Agregar Usuarios <small class="text-muted">Agrega un nuevo usuario a la base de datos.</small></h3>
     <form id="crud_form" method="post" action="/frontpage/user_crud/">
         {% csrf_token %}
-        Usuario:<br/> <input type="text" name="username" value="" size="50" />
-        <br/>
-        Contraseña:<br/><input type="password" name="password" value="" size="50" />
-        <br/>
-        <br/>
-        <input type="submit" value="Agregar usuario" />
+        <div class="form-group">
+            <label for="usernameInput">Nombre de usuario</label>
+            <input size="50" type="text" class="form-control col-4" id="usernameInput" aria-describedby="usernameHelp" placeholder="Ingrese Usuario">
+            <small id="usernameHelp" class="form-text text-muted">No es necesario que sea una cuenta de correo, puede ser un nombre</small>
+        </div>
+        <div class="form-group">
+            <label for="passwordInput">Password</label>
+            <input size="12" type="password" class="form-control col-4" id="passwordInput" placeholder="Password">
+        </div>
+        <button type="submit" class="btn btn-primary">Agregar usuario</button>
     </form>
 {% endblock %} 

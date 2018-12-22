@@ -2,9 +2,9 @@
 
 {% block content %}
 {% if packages %}
-<table id='test'>
+<table id='contentTable'>
     <thead>
-    	<tr>
+    	<tr class='contentTableHeaderRow'>
     		<th> App name </th>
     		<th> Package name </th>
     		<th> Version </th>
@@ -37,47 +37,12 @@
 		{% endfor %}
     </tbody>
 </table>
-
-<script type="text/javascript">
-    $(document).ready( function () {
-        $('#test').DataTable();
-    } );
-    
-</script>
-
-<!-- <table>
-<div class="pagination">
-    <span class="step-links">
-        <tr>
-            {% if packages.has_previous %}
-            <td>
-                <form action="?page={{ packages.previous_page_number }}" method="post">
-                    {% csrf_token %}
-                    <input name="terms" type="hidden" value="{{terms}}" />
-                    <input type="submit" value="Prev"/>
-                </form>
-            </td>
-            {% endif %}
-            <td>
-                <span class="current" >
-                    Page {{ packages.number }} of {{ packages.paginator.num_pages }}.
-                </span>
-            </td>
-            {% if packages.has_next %}
-            <td>
-                <form action="?page={{ packages.next_page_number }}" method="post">
-                    {% csrf_token %}
-                    <input name="terms" type="hidden" value="{{terms}}" />
-                    <input type="submit" value="Next"/>
-                </form>
-            </td>
-            {% endif %}
-        </tr>
-    </span>
-</div>
-</table> -->
-	
 {% else %}
 	<p> No apps available </p>
 {% endif %}
+<script type="text/javascript">
+    $(document).ready( function () {
+        $('#contentTable').DataTable();
+    } );
+</script>
 {% endblock %}

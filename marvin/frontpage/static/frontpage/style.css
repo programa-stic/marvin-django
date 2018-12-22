@@ -243,10 +243,6 @@ table {
     border-color: #ccc;
 }
 
-table.dataTable thead {
-    color:blue !important;
-}
-
 td, th {
     font-size: 16px;
     line-height: 20px;

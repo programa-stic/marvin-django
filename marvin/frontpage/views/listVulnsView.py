@@ -17,43 +17,15 @@ def list_vulns(request, vuln_list):
 		apps = set(App.objects.filter(vulnerabilityresult__name=vt))
 		myList.append({"name":vt, "count":positives.count, "appcount":len(apps)})
 		myList.sort(key= lambda vt:vt['appcount'], reverse=True)
-	paginator = Paginator(myList,20)
-	page = request.GET.get('page')
-	try:
-		vulns = paginator.page(page)
-	except PageNotAnInteger:
-		vulns = paginator.page(1)
-	except EmptyPage:
-		vulns = paginator.page(paginator.num_pages)
-	context = {'vulns':vulns}
+	context = {'vulns':myList}
 	return render(request, 'frontpage/static_vulns.html', context)
 
 def list_verified_vulns(request):
 	vulnsFound = VulnerabilityResult.objects.filter(dynamictestresults__status="SUCCESS").order_by('-dynamictestresults__last_check')
-	#context = {'last_packages':appsFound}
-	#appsFound = map(lambda vuln:vuln.app, vulnsFound)
-	paginator = Paginator(vulnsFound, 20)
-	page = request.GET.get('page')
-	try:
-		last_packages = paginator.page(page)
-	except PageNotAnInteger:
-		last_packages = paginator.page(1)
-	except EmptyPage:
-		last_packages = paginator.page(paginator.num_pages)
-	context = {'vulns':last_packages}
+	context = {'vulns':vulnsFound}
 	return render(request, 'frontpage/discovered_vulns.html', context)
 
 def list_enabled_vulns(request):
 	vulnsFound = VulnerabilityResult.objects.filter(scheduledForDT=True).order_by('-app__uploaded')
-	#context = {'last_packages':appsFound}
-	#appsFound = map(lambda vuln:vuln.app, vulnsFound)
-	paginator = Paginator(vulnsFound, 20)
-	page = request.GET.get('page')
-	try:
-		last_packages = paginator.page(page)
-	except PageNotAnInteger:
-		last_packages = paginator.page(1)
-	except EmptyPage:
-		last_packages = paginator.page(paginator.num_pages)
-	context = {'vulns':last_packages}
+	context = {'vulns':vulnsFound}
 	return render(request, 'frontpage/enabled_vulns.html', context)

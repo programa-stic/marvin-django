@@ -8,7 +8,8 @@
 	<form enctype="multipart/form-data" method="post"  >
 		{% csrf_token %}
 		{{form}}
-		<input type="submit" value="Search" action="/search_source/"/>
+		<button type="submit" class="btn btn-primary" action="/search_source/">Buscar</button>
+
 	</form>
 	
 {% endblock %}

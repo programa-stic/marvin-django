@@ -6,7 +6,7 @@
 	<form enctype="multipart/form-data" method="post"  >
 	{% csrf_token %}
 		{{form}}
-		<input type="submit" value="Upload" action="/"/>
+        <button type="submit" class="btn btn-primary" action="/">Subir Archivo</button>
 	</form>
 	{% endblock %}
 {% endblock %}
