@@ -1,24 +1,22 @@
-{% load staticfiles %}
-<link rel="stylesheet" type="text/css" href="{% static 'frontpage/style.css' %}" />
-<!DOCTYPE html>
-<html>
-    <head>
-        <!-- Is anyone getting tired of repeatedly entering the header over and over?? -->
-        <title>Marvin</title>
-    </head>
+{% extends "frontpage/base.html" %}
 
-    <body>
-        <h1>Log into Marvin</h1>
+{% block content %}
+       <h1>Ingresar a Marvin</h1>
 
+    {% block form %}
         <form id="login_form" method="post" action="/frontpage/login/">
             {% csrf_token %}
-            Username: <input type="text" name="username" value="" size="50" />
-            <br />
-            Password: <input type="password" name="password" value="" size="50" />
-            <br />
-
-            <input type="submit" value="submit" />
+            
+            <div class="form-group">
+                <label for="username">Nombre de usuario:</label>
+                <input  name="username" value="" size="50" type="text" class="form-control col-4" id="usernameInput" aria-describedby="usernameHelp" placeholder="Ingrese Usuario">
+            </div>
+            <div class="form-group">
+                <label for="passwordInput">Contraseña:</label>
+                <input name="password" value="" size="12" type="password" class="form-control col-4" id="passwordInput" placeholder="********">
+            </div>
+            <button type="submit" class="btn btn-primary">Ingresar</button>
         </form>
 
-    </body>
-</html>
+    {% endblock %}
+{% endblock %}

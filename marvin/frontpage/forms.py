@@ -25,11 +25,12 @@
 from django import forms
 
 class UploadFileForm(forms.Form):
-	#title = forms.CharField(max_length=100)
 	file = forms.FileField()
 
 class SearchForm(forms.Form):
-	terms = forms.CharField(label = "Search terms", max_length=100)
+	terms = forms.CharField(label = "Criterio de busqueda", max_length=100)
+	terms.widget = forms.TextInput(attrs={'size': 15})
 
 class CommentForm(forms.Form):
 	text = forms.CharField(label="Comentario")
+	text.widget = forms.TextInput(attrs={'size': 15})

@@ -27,23 +27,28 @@
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
                 {% if user.is_authenticated %}
-                    <li><b>Bienvenido</b>, {{ user.username }}.</li>
+                    <li class='user-actions'><b>Bienvenido</b>, {{ user.username }}.</li>
                 {% else %}
-                    <li><a href="/frontpage/login/">Log in.</a></li>
-            {% endif %}
-            <li><a href="/frontpage/">Home</a></li>
-            <li><a href="/user_crud/">Administrar Usuarios</a></li>
-            <li><a href="/frontpage/upload/">Subir archivo</a></li>
-            <li><a href="/frontpage/search_googleplay/">Buscar app en Google Play</a> 
-            <li><a href="/frontpage/search_app/">Buscar app en Marvin</a>
-            <li><a href="/frontpage/flush_queue/">Resetear agentes</a>
-            <li><a href="/frontpage/search_source/">Buscar en código</a> 
-            <li><a href="/frontpage/ListaPermisos">Permisos</a></li>
-            <li><a href="/frontpage/static_vulns/">Vulnerabilidades (s)</a>
-            <li><a href="/frontpage/dynamic_vulns/">Vulnerabilidades (d)</a>
-            <li><a href="/frontpage/verified_vulns/">Vuln. verificadas</a>
-            <li><a href="/frontpage/enabled_vulns/">Vuln. en chequeo</a>
-            {% if user.is_authenticated %}<li><a href="/frontpage/logout/">Logout</a></li> {% endif %}
+                    <li class='user-actions'><a href="/frontpage/login/">Ingresar</a></li>
+                {% endif %}
+                <li><a href="/frontpage/">Inicio</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="/user_crud/">Administrar Usuarios</a></li>
+                    <li><a href="/frontpage/upload/">Subir archivo</a></li>
+                {% endif %}
+
+                <li><a href="/frontpage/search_googleplay/">Buscar app en Google Play</a></li>
+                <li><a href="/frontpage/search_app/">Buscar app en Marvin</a></li>
+
+                <li><a href="/frontpage/search_source/">Buscar en código fuente</a></li> 
+                <li><a href="/frontpage/ListaPermisos">Permisos</a></li>
+                <li><a href="/frontpage/static_vulns/">Vulnerabilidades (s)</a></li>
+                <li><a href="/frontpage/dynamic_vulns/">Vulnerabilidades (d)</a></li>
+                <li><a href="/frontpage/verified_vulns/">Vuln. verificadas</a></li>
+                <li><a href="/frontpage/enabled_vulns/">Vuln. en chequeo</a></li>
+                {% if user.is_authenticated %}
+                    <li class='user-actions'><a href="/frontpage/logout/">Cerrar sesión</a></li> 
+                {% endif %}
             </ul>
         </div>
         <!-- /#sidebar-wrapper -->

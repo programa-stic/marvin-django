@@ -864,3 +864,7 @@ table#change-history tbody th {
 .normal {
     background:white;
 }
+
+.user-actions{
+    background-color: brown;
+}

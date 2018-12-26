@@ -13,7 +13,6 @@
             <th> DC Status </th>		
     		<th> SA Status </th>
     		<th> Vulns </th>
-    		<th>  </th>
     	</tr>
     <!-- </thead> -->
     <tbody>
@@ -24,10 +23,14 @@
 		<td>{{app.version}} </td>
 		<td>{{app.DLstatus}} </td>
         <td>{{app.DCstatus}} </td>
-        <td>{{app.SAstatus}} </td>        
+        <td>{{app.SAstatus}} </td>    
+        <td></td>    
 	{% endfor %}
     </tbody>
 </table>
+{% if user.is_authenticated %}
+    <button class="btn btn-primary " href="/frontpage/flush_queue/">Resetear agentes</button>
+{% endif %}
 	
 {% else %}
 	<p>No hay nada aquí, sólo unos días que se aprestan a pasar </p>
