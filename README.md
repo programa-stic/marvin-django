@@ -69,6 +69,12 @@ Marvin se inicia con el comando
 
 en el directorio `marvin-django/marvin`.
 
+### Agentes ###
+El proyecto cuenta con 3 agentes que son los encargados de interactuar la cola de mensajes que genera Marvin. El codigo de los mismos se pude encontrar dentro del dirctorio "/agent".
+Para que marvin funcione correctamente, es necesario inicializar los agentes, lo cual se puede hacer desde el script "start-agents", o corriendo cada uno individualmente con el comando python "marvin_nombre_del_agente_agent.py"
+La opcion "Resetar Agentes" dentro del menu, permite vaciar la cola de mensajes en caso de que sea necesario. Que Llos agentes no esten activos no causa ningun inconveniente  
+
+
 ### Dependencias ###
 	  Django 1.7
 	  pip

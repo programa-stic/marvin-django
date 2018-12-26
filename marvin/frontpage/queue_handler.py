@@ -33,17 +33,22 @@ def flush_queue():
 		connection = pika.BlockingConnection(pika.ConnectionParameters(host=agent_settings.queue_host))
 		ch = connection.channel()
 
+		success = False
+
 		response = ch.queue_purge(queue=agent_settings.download_queue)
 		# import pdb; pdb.set_trace()
 		if pika.spec.Queue.PurgeOk == type(response.method):
+			success = True
 			print "Se vaciaron ", response.method.message_count, " mensajes de " + agent_settings.download_queue
 
 		response = ch.queue_purge(queue=agent_settings.androlyze_queue)
 		if pika.spec.Queue.PurgeOk == type(response.method):
+			success = True
 			print "Se vaciaron ", response.method.message_count, " mensajes de " + agent_settings.androlyze_queue
 		
 		response = ch.queue_purge(queue=agent_settings.process_queue_vuln)
 		if pika.spec.Queue.PurgeOk == type(response.method):
+			success = True
 			print "Se vaciaron ", response.method.message_count, " mensajes de " + agent_settings.process_queue_vuln
 		
 		connection.close()

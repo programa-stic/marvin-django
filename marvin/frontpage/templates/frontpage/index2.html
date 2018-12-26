@@ -29,15 +29,20 @@
     </tbody>
 </table>
 {% if user.is_authenticated %}
-    <button class="btn btn-primary " href="/frontpage/flush_queue/">Resetear agentes</button>
+    <!-- <button id="resetAgentBtn" class="btn btn-primary " href="/frontpage/flush_queue/">Resetear agentes</button> -->
+    <button id="resetAgentBtn" class="btn btn-primary " onclick="myFunction()">Resetear Agentes</button>
+
 {% endif %}
 	
 {% else %}
 	<p>No hay nada aquí, sólo unos días que se aprestan a pasar </p>
 {% endif %}
-<!-- <script type="text/javascript">
-    $(document).ready( function () {
-        $('#contentTable').DataTable();
-    } );
-</script> -->
+
+<script type="text/javascript">
+    function myFunction() {
+        ret = confirm("Se va a proceder a vaciar los agentes");
+        window.location.href = "/frontpage/flush_queue/";
+    }
+</script>
+</script>
 {% endblock %}
