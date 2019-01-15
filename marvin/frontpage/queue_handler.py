@@ -36,7 +36,6 @@ def flush_queue():
 		success = False
 
 		response = ch.queue_purge(queue=agent_settings.download_queue)
-		# import pdb; pdb.set_trace()
 		if pika.spec.Queue.PurgeOk == type(response.method):
 			success = True
 			print "Se vaciaron ", response.method.message_count, " mensajes de " + agent_settings.download_queue

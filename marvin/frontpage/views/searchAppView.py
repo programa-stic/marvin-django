@@ -14,7 +14,6 @@ def search_app(request):
 			appsFound = App.objects.filter(Q(package_name__icontains=searchterms) | Q(app_name__icontains=searchterms))
 			# newAF = appsFound.params(size=min(appsFound.count(), 100)).execute()
 			# newAF.sort(key=lambda app: app.app_name)
-			# import pdb; pdb.set_trace()
 			context = {'last_packages':appsFound}
 			return render(request, 'frontpage/index2.html', context)
 		else:

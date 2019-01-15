@@ -8,7 +8,6 @@ import tempfile, zipfile
 def src(request, app_id):
 	myApp = get_object_or_404 (App, pk=app_id)
 	mySources = myApp.sourcefile_set.all()
-	# import pdb; pdb.set_trace()
 	temp = tempfile.NamedTemporaryFile(delete=False)
 	arch = zipfile.ZipFile(temp, 'w')
 	#old *working* code ffollows
