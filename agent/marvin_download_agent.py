@@ -44,7 +44,7 @@ in_channel.queue_bind(exchange = agent_settings.marvin_exchange_dl,
 def callback(ch, method, properties, body):
     if dummy == False:
         server = googleplay.GooglePlayAPI('es_AR', 'America/Buenos_Aires')
-        server.login('gpagent001.fsadosky@gmail.com', 'grok984sanfason', None, None)
+        server.login(agent_settings.marvin_google_username, agent_settings.marvin_google_password, None, None)
         (package_name, version_string) = unmarshal_name_version(body)
         print "[x] Mensaje recibido, descargar %r" % (package_name)
         myApp = App.objects.filter(package_name=package_name, version=version_string)[0]

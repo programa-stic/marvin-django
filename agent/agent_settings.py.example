@@ -1,7 +1,7 @@
 import os
 import sys
 
-django_dir           = "/home/fgimenez/marvin-django/marvin/"
+django_dir           = <installation dir>
 common_modules_dir   = django_dir+"frontpage/"
 settings_dir	     = django_dir+"marvin/"
 
@@ -20,6 +20,9 @@ queue_host	     = "localhost"
 marvin_exchange_dl   = "marvin_xchg_dl"
 marvin_exchange_andr = "marvin_xchg_androlyze"
 marvin_exchange_pr   = "marvin_xchg_pr"
+
+marvin_google_username	= <account name>
+marvin_google_password	= <password>
 
 download_queue       = "marvin_download_queue"
 androlyze_queue	     = "marvin_androlyze_queue"

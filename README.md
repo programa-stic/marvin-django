@@ -1,3 +1,7 @@
+### Disclaimer ###
+
+A partir de esta nueva version de Marvin, el proyecto ya no va a ser mantenido por sus creadores. La idea es que cualquiera que lo desee continuar, pueda hacerlo.
+
 # MARVIN #
 
 Marvin es un sistema que analiza aplicaciones de Android en busca de vulnerabilidades y permite realizar un seguimiento de las mismas a lo largo de su historial de versiones.
@@ -70,19 +74,18 @@ Marvin se inicia con el comando
 en el directorio `marvin-django/marvin`.
 
 ### Agentes ###
-El proyecto cuenta con 3 agentes que son los encargados de interactuar la cola de mensajes que genera Marvin. El codigo de los mismos se pude encontrar dentro del dirctorio "/agent".
+El proyecto cuenta con 3 agentes que son los encargados de interactuar la cola de mensajes que genera Marvin. El codigo de los mismos se pude encontrar dentro del directorio "/agent".
 Para que marvin funcione correctamente, es necesario inicializar los agentes, lo cual se puede hacer desde el script "start-agents", o corriendo cada uno individualmente con el comando python "marvin_nombre_del_agente_agent.py"
-La opcion "Resetar Agentes" dentro del menu, permite vaciar la cola de mensajes en caso de que sea necesario. Que Llos agentes no esten activos no causa ningun inconveniente  
-
+La opcion "Resetar Agentes" dentro del menu, permite vaciar la cola de mensajes en caso de que sea necesario. Que los agentes no esten activos no causa ningun inconveniente
+En caso dequerer ver el estado de las colas de trabajo, se puede utilizar el comando "rabbitmqctl list_queues"
 
 ### Dependencias ###
-	  Django 1.7
+	  Django 1.11
 	  pip
 	  apk-vulnerability-finder
 	  django-googleplay-api 
 	  androguard
 	  elasticsearch
-	  bungiesearch 1.1.0 o superior
 	  mysql o postgres
 	  una cuenta de Gitlab con mucho espacio
 	  python-gitlab 
@@ -91,6 +94,12 @@ La opcion "Resetar Agentes" dentro del menu, permite vaciar la cola de mensajes 
 	  simplejson
 	  arff
 	  openjdk 
+
+### TODO List ###
+  * Ir actualizando el listado de devices para mantener compatibilidad contra google store.
+  * Modificar codigo deprecado (ej: Bungiesearch).
+  * Mantener actualizada la api con google.
+  * Documentacion
 
 ### Créditos ###
   * Juan Heguiabehere ([@jheguia](https://www.twitter.com/jheguia))
