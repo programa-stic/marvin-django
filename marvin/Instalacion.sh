@@ -4,7 +4,7 @@
 cd ~
 apt-get update
 #apt-get upgrade
-pip install django==1.11.5
+pip install django==1.11.18
 # pip install django-googleplay-api # (ver configuracion que esta en ruso)
 # sed -i "s/LANG = get_settings('LANG', \"ru_RU\")/LANG = get_settings('LANG', \"es_AR\")/" /usr/local/lib/python2.7/dist-packages/djgpa/configs.py 
 # sed -i "s/COUNTRY = get_settings('COUNTRY', 'ru')/COUNTRY = get_settings('COUNTRY', 'ar')/" /usr/local/lib/python2.7/dist-packages/djgpa/configs.py 
