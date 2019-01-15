@@ -8,8 +8,11 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import re
 
 def dirtybastard(numDownloadsString):
-	return int(re.search(r'\d+', numDownloadsString.replace(',', '')).group())+10*len(numDownloadsString)
-
+	ret = 0
+	if numDownloadsString:
+		ret = int(re.search(r'\d+', numDownloadsString.replace(',', '')).group())+10*len(numDownloadsString)
+	return ret
+	
 def search_googleplay(request):
 	myToken = csrf(request)
 	global appsRetrieved
@@ -18,6 +21,7 @@ def search_googleplay(request):
 		if form.is_valid() and gp_authenticated:
 			searchterms = request.POST['terms']
 			appsFound = gp_server.search(searchterms, 15, None)
+			import pdb; pdb.set_trace()
 			appsFound.sort(key=lambda app: dirtybastard(app['numDownloads']), reverse=True)
 			context = {'packages':appsFound}
 			return render(request, 'frontpage/gpresults.html', context)
