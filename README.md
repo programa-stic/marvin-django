@@ -1,3 +1,4 @@
+[DEPRECATED]
 # MARVIN #
 
 Marvin es un sistema que analiza aplicaciones de Android en busca de vulnerabilidades y permite realizar un seguimiento de las mismas a lo largo de su historial de versiones.
